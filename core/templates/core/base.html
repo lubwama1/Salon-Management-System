@@ -1,0 +1,183 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block meta %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="description"
+      content="{% block meta_description %}{{ SITE_NAME }} is a salon management and online booking system for beauty, hair, nails, spa services, staff management, and customer appointments.{% endblock %}"
+    />
+    <meta
+      name="keywords"
+      content="salon booking, beauty salon, hair salon, spa management, salon management system, online appointments, nail salon"
+    />
+
+    <meta name="author" content="Rayn Codes" />
+    <meta name="robots" content="index, follow" />
+    <meta name="publisher" content="{{ SITE_NAME }}" />
+    <link
+      rel="canonical"
+      href="http://{{ request.get_host }}{{ request.path }}"
+    />
+    <link rel="icon" href="{{ SITE_LOGO }}" type="image/png" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="http://{{ request.get_host }}{{ request.path }}"
+    />
+    <meta
+      property="og:title"
+      content="{% block og_title %}{{ SITE_NAME }}{% endblock %}"
+    />
+
+    <meta
+      property="og:description"
+      content="{% block og_description %}{{ SITE_NAME }} | Salon online booking management system{% endblock %}"
+    />
+
+    <meta
+      property="og:image"
+      content="http://{{ request.get_host }}{{ SITE_LOGO }}"
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta
+      name="twitter:title"
+      content="{% block twitter_title %}{{ SITE_NAME }}{% endblock %}"
+    />
+
+    <meta
+      name="twitter:description"
+      content="{% block twitter_description %}{{ SITE_NAME }} | Salon online booking management system{% endblock %}"
+    />
+
+    <meta
+      name="twitter:image"
+      content="http://{{ request.get_host }}{{ SITE_LOGO }}"
+    />
+    {% endblock meta %}
+    <!-- Business Schema -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BeautySalon",
+        "name": "{{ SITE_NAME }}",
+        "url": "{{ request.scheme }}://{{ request.get_host }}",
+        "description": "Online salon booking system for hair, nails, spa, and beauty services",
+        "image": "{{ SITE_LOGO }}",
+        "telephone": "{{ SITE_PHONENUMBER }}",
+        "email": "{{ SITE_EMAIL }}",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Abu Dhabi, UAE",
+          "addressLocality": "Abu Dhabi",
+          "addressCountry": "AE"
+        }
+      }
+    </script>
+    {% block schema %}{% endblock schema %}
+    <!-- Breadcrumb Schema -->
+     {% comment %}
+     <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "{{ request.scheme }}://{{ request.get_host }}/"
+
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Services",
+          "item": "{{ request.scheme }}://{{ request.get_host }}/services/service-list/"
+        }
+        ]
+
+      }
+     </script>
+     {% endcomment %}
+    <title>{% block title %}{% endblock title %}{{ SITE_NAME }}</title>
+    {% block css %}
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Animation link -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+
+    <!-- Font Awesome CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ SITE_LOGO }}" type="image/x-icon" />
+    <!-- Bootstrap -->
+    <!-- <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    /> -->
+    <!-- Bootswatch Theme -->
+    <link
+      rel="stylesheet"
+      href="https://bootswatch.com/5/cyborg/bootstrap.min.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'CSS/main.css' %}" />
+    {% endblock css %}
+  </head>
+  <body class="d-flex flex-column min-vh-100">
+    {% if request.user.is_authenticated %}
+      {% if request.user.role == CUSTOMER_ROLE %}
+        {% include 'core/customer_navbar.html' %}
+      {% elif request.user.role == STAFF_ROLE %}
+        {% if request.resolver_match.url_name != 'staff-confirmation' %}
+          {% include 'core/staff_navbar.html' %}
+        {% endif %}
+      {% elif request.user.role == ADMIN_ROLE %}
+        {% include 'core/admin_navbar.html' %}
+      {% endif %}
+    {% else %}
+      {% include 'core/guest_navbar.html' %}
+    {% endif %}
+    <main class="content flex-grow-1">
+      {% block content %} {% endblock content %}
+    </main>
+    <!-- FOOTER -->
+    {% include 'core/footer.html' %}
+    <!-- <div class="footer">
+      <p>
+        &copy <span id="current-year">2026</span> Elite Salon | All Rights
+        Reserved
+      </p>
+    </div> -->
+    {% block js %}
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'JS/main.js' %}"></script>
+    <script src="{% static 'JS/admin.js' %}"></script>
+    <script src="{% static 'JS/staff.js' %}"></script>
+    <script src="{% static 'JS/customer.js' %}"></script>
+    {% block comment %}
+    <script src="{% static 'JS/notification.js' %}"></script>
+    {% endblock comment %}
+    {% endblock js %}
+  </body>
+</html>

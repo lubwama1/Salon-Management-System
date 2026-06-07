@@ -1,0 +1,145 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Edit Profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm rounded-3 border-start border-4 border-success"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-smile-wink me-2 text-success"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div
+          class="card-header bg-success bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-edit fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Edit Your Profile</h4>
+          <p class="small mb-0 opacity-75">
+            Keep your personal information up to date
+          </p>
+        </div>
+
+        <div class="card-body p-4">
+          <form
+            action="{% url 'customer:profile-edit' %}"
+            method="post"
+            enctype="multipart/form-data"
+            id="customerEditForm"
+          >
+            {% csrf_token %}
+
+            <!-- Profile Image Preview Section -->
+            <div class="text-center mb-4">
+              <div
+                class="mx-auto rounded-circle overflow-hidden border border-3 border-success shadow-sm mb-3"
+                style="width: 120px; height: 120px; background: #f8f9fa"
+              >
+                <img
+                  id="customerImagePreview"
+                  src="{% if form.instance.profile_image %}{{ form.instance.profile_image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
+                  class="w-100 h-100"
+                  style="object-fit: cover"
+                  alt="Customer Photo"
+                />
+              </div>
+              <div class="small text-muted">
+                <i class="fas fa-cloud-upload-alt me-1 text-success"></i> Click
+                to change profile picture
+              </div>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="mb-4">{{ form|crispy }}</div>
+
+            <!-- Privacy Note -->
+            <div
+              class="alert alert-success bg-opacity-10 border-success rounded-3 mb-4"
+            >
+              <div class="d-flex gap-3 align-items-start">
+                <i class="fas fa-shield-alt text-success fs-5 mt-1"></i>
+                <div>
+                  <strong class="small d-block">Privacy Protected</strong>
+                  <small class="text-light"
+                    >Your information is kept confidential and used only for
+                    appointment purposes.</small
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Loyalty Preview (Customer specific) -->
+            <div class="bg-light rounded-3 p-3 mb-4 text-center">
+              <i class="fas fa-gem text-success me-1"></i>
+              <span class="small fw-semibold">Loyalty Points:</span>
+              <span class="badge bg-success rounded-pill ms-2">1,250 pts</span>
+              <div class="progress mt-2" style="height: 3px">
+                <div class="progress-bar bg-success" style="width: 62%"></div>
+              </div>
+              <small class="text-muted">250 more points to next tier</small>
+            </div>
+            <!-- Large Screen -->
+            <div class="d-none d-md-flex gap-2 mb-3">
+              <a
+                href="{% url 'customer:profile' %}"
+                class="btn btn-outline-secondary flex-fill"
+              >
+                <i class="fas fa-times me-2"></i>Discard
+              </a>
+              <button type="submit" class="btn btn-primary flex-fill">
+                <i class="fas fa-check-circle me-2"></i>Update Profile
+              </button>
+            </div>
+            <!-- Small Screen -->
+            <div class="d-md-none d-flex gap-2 mb-3">
+              <a
+                href="{% url 'customer:profile' %}"
+                class="btn btn-outline-secondary btn-sm flex-fill"
+              >
+                <i class="fas fa-times me-2"></i>Discard
+              </a>
+              <button type="submit" class="btn btn-primary btn-sm flex-fill">
+                <i class="fas fa-check-circle me-2"></i>Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="card-footer bg-success bg-opacity-10 border-0 text-center py-3"
+        >
+          <small class="text-success">
+            <i class="fas fa-headset me-1"></i> Need help?
+            <a href="#" class="text-success fw-semibold">Contact Support</a>
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,150 @@
+{% extends 'core/base.html' %} {% load tz %}
+{% block title %}Notifications | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row">
+    <div class="col-12">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show mb-2" role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-7">
+      {% if notifications %}
+
+      <div class="card shadow-sm border-0">
+        <!-- HEADER -->
+        <div
+          class="card-header d-flex justify-content-between align-items-center mb-4 border-bottom-0 text-white bg-primary bg-gradient"
+        >
+          <div class="text-white">
+            <h3 class="card-title fw-bold me-3">
+              <i class="fas fa-bell me-2"></i>Notifications
+            </h3>
+            <small class="opacity-75">
+              You have
+              <span class="badge bg-light rounded-pill">
+                {{ notifications|length }}
+              </span>
+              notifications
+            </small>
+          </div>
+
+          <div class="d-flex align-items-center gap-3">
+            <div class="form-check form-switch m-0">
+              <input type="checkbox" class="form-check-input" id="select-all" />
+              <label class="form-check-label text-white ms-1" for="select-all">
+                Select All
+              </label>
+            </div>
+
+            <form
+              action="{% url 'staff:delete-all-notifications' %}"
+              method="post"
+              class="m-0 p-0"
+            >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- FORM START -->
+        <form
+          action="{% url 'staff:delete-selected-notifications' %}"
+          method="post"
+          class="mt-0"
+        >
+          {% csrf_token %}
+
+          <!-- BODY -->
+          <div
+            class="card-body mb-0"
+            style="max-height: 400px; overflow-y: auto"
+          >
+            {% for n in notifications %}
+            <div class="border-start border-primary border-3 ps-3 mb-4">
+              <div
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <div class="flex-grow-1">
+                  <p class="mb-0 fw-semibold text-white">{{ n.message }}</p>
+                  <small class="text-white-50">
+                    <i class="far fa-clock me-1"></i>
+                    {{ n.timestamp|localtime }}
+                  </small>
+                </div>
+
+                <div class="d-flex align-items-center ms-3">
+                  <a
+                    href="{{ n.link|default:'#' }}"
+                    class="btn btn-sm btn-outline-dark me-2"
+                  >
+                    <i class="fas fa-external-link-alt"></i>
+                  </a>
+
+                  <input
+                    type="checkbox"
+                    class="form-check-input notification-checkbox"
+                    name="selected_notifications"
+                    value="{{ n.id }}"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {% if not forloop.last %}
+            <hr class="my-3 border-secondary" />
+            {% endif %} {% endfor %}
+          </div>
+
+          <!-- FOOTER -->
+          <div
+            class="card-footer bg-transparent border-secondary py-3 position-sticky bottom-0"
+            style="
+              z-index: 10;
+              backdrop-filter: blur(5px);
+              background-color: rgba(33, 37, 41, 0.85);
+            "
+          >
+            <button type="submit" class="btn btn-sm btn-danger w-100">
+              Delete Selected Notifications
+            </button>
+          </div>
+        </form>
+        <!-- FORM END -->
+      </div>
+
+      {% else %}
+
+      <!-- EMPTY STATE -->
+      <div class="card text-center py-5 dashboard-card">
+        <div class="card-body">
+          <i class="fas fa-inbox display-1 text-white-50 mb-3"></i>
+          <h4 class="text-white-50 mb-2">No notifications</h4>
+          <p class="text-white-50">Your notification inbox is empty</p>
+        </div>
+      </div>
+
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

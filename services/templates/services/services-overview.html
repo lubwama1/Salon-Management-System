@@ -1,0 +1,245 @@
+{% extends 'core/base.html' %}
+{% block title %}Services Overview | {% endblock title %}
+{% block content %}
+
+<div class="container-fluid py-5">
+  <div class="container py-2">
+    <!-- Messages -->
+    {% if messages %}
+    <div class="col-md-6-mx-auto">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show text-center"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  <div class="card shadow border-0 rounded-4">
+    <!-- Header -->
+    <div class="card-header bg-danger text-white rounded-top-4">
+      <!-- Large Screen -->
+      <div class="d-none d-lg-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">
+          <i class="fas fa-layer-group me-2"></i> Elite Service Management System
+        </h5>
+        <a
+          href="{% url 'services:service-add' category.slug %}"
+          class="btn btn-sm btn-light"
+        >
+          <i class="fa fa-plus me-1"></i> Add Service
+        </a>
+      </div>
+
+      <!-- Small Screen -->
+      <div class="d-lg-none d-flex justify-content-between align-items-center">
+        <h6 class="fw-bold mb-0 small">
+          <i class="fas fa-layer-group me-2"></i> Elite Service Management
+        </h6>
+        <a
+          href="{% url 'services:service-add' category.slug %}"
+          class="btn btn-sm btn-light"
+        >
+          <i class="fa fa-plus me-1"></i> Add
+        </a>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+      <!-- Large Screen -->
+      <div class="table-responsive d-none d-xl-block">
+        <table
+          class="table table-hover table-bordered align-middle text-center"
+        >
+          <!-- Table Head -->
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Category</th>
+              <th>Service Name</th>
+              <th>Description</th>
+              <th>Price</th>
+              <th>Date Added</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody>
+            {% if services %} {% for serv in services %}
+            <tr>
+              <td class="fw-semibold text-primary">{{forloop.counter }}</td>
+
+              <td class="text-muted">{{ serv.service_category.name }}</td>
+
+              <td>
+                <small class="text-muted"> {{ serv.name }} </small>
+              </td>
+              <td>
+                <span class="badge bg-info text-white"
+                  >{{ serv.description }}</span
+                >
+              </td>
+              <td>${{ serv.price }}</td>
+              <td>
+                <span class="badge bg-primary text-light">
+                  {{ serv.created_at }}
+                </span>
+              </td>
+              <td>
+                <a
+                  href="{% url 'services:service-edit' serv.slug %}"
+                  class="btn btn-sm btn-outline-warning"
+                >
+                  <i class="fas fa-edit"></i>
+                </a>
+
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#DeleteServiceModal"
+                  data-service-name="{{ serv.name }}"
+                  data-service-id="{{ serv.id }}"
+                  data-url="{% url 'services:service-delete' serv.slug %}"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="8" class="text-muted py-4">
+                <i class="fas fa-info-circle me-2"></i>
+                No Services found.
+              </td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Small Screen -->
+      <!--
+                Responsive Grid Classes:
+                - col-12: Full width on mobile (<576px)
+                - col-sm-6: 2 cards per row on small devices (≥576px)
+                - col-md-4: 3 cards per row on medium devices (≥768px)
+                - col-lg-4: 3 cards per row on large devices (≥992px)
+                - col-xl-3: 4 cards per row on extra large (≥1200px)
+
+                For your specific screen sizes (768x1024, 820x1180, 1024x1366, 912x1368, 853x1280, 1024x600, 1280x800):
+                - All these will use col-md-4 or col-lg-4 showing 3 cards per row
+              -->
+      <div class="d-xl-none">
+        <div class="row g-3">
+          {% for serv in services %}
+          <div class="col-12 col-sm-6">
+            <div class="border rounded p-3">
+              <h6 class="fw-bold mb-2">{{ serv.name }}</h6>
+              <p class="text-muted small">{{ serv.description }}</p>
+              <p class="fw-bold">${{ serv.price }}</p>
+              <span class="badge bg-primary text-light">
+                {{ serv.created_at }}
+              </span>
+              <div class="d-flex justify-content-between mt-2">
+                <a
+                  href="{% url 'services:service-edit' serv.slug %}"
+                  class="btn btn-sm btn-outline-warning"
+                >
+                  <i class="fas fa-edit"></i>
+                </a>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#DeleteServiceModal"
+                  data-service-name="{{ serv.name }}"
+                  data-service-id="{{ serv.id }}"
+                  data-url="{% url 'services:service-delete' serv.slug %}"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="col-12">
+            <p class="text-muted text-center">No Services found.</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="mt-4 text-center">
+        <a
+          href="{% url 'services:category-list' %}"
+          class="btn btn-lg btn-secondary rounded-pill"
+        >
+          <i class="fas fa-arrow-left me-2"></i> Back to Categories
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Service Modal -  -->
+<div
+  class="modal fade"
+  id="DeleteServiceModal"
+  tabindex="-1"
+  aria-labelledby="DeleteServiceModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="DeleteServiceModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Confirm Service Deletion
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="">Are you sure you want to delete the service:</p>
+        <p class="fw-bold text-danger" id="serviceNameDisplay"></p>
+        <p class="text-muted small">
+          This action cannot be undone. All services in this service will also
+          be deleted.
+        </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <form method="post" id="deleteServiceForm">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-times-circle me-1"></i>
+            Confirm Deletion
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            <i class="fas fa-ban me-1"></i>
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Delete Service Modal -->
+
+{% endblock %}

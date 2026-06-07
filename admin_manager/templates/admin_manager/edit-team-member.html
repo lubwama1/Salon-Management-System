@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% block title %}Edit Member | {% endblock title %} {% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-12">
+      <div class="card shadow-sm border-0 rounded-top-4 mt-2">
+        <div class="card-header text-center bg-danger text-white">
+          <h4 class="card-title fw-semibold">
+            <i class="fas fa-user-plus me-2"></i>Edit Member data
+          </h4>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'admin_manager:edit-member' member.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %} {{ form|crispy }}
+            <!-- Large Screen -->
+            <div class="d-grid gap-2 d-none d-md-flex">
+              <a
+                href="{% url 'admin_manager:team-list' %}"
+                class="btn btn-outline-dark flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Add Member
+              </button>
+            </div>
+            <!-- Small Screen -->
+            <div class="d-grid gap-2 d-md-none d-flex">
+              <a
+                href="{% url 'admin_manager:team-list' %}"
+                class="btn btn-sm btn-outline-dark flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-sm btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Add Member
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

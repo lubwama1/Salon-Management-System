@@ -1,0 +1,48 @@
+{% if request.user.is_authenticated and request.user.role == CUSTOMER_ROLE %}
+<div class="mini-navbar d-md-none fixed-bottom">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-3">
+        <a
+          href="{% url 'core:home' %}"
+          class="mini-nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %} text-decoration-none"
+        >
+          <i class="fas fa-home fa-lg"></i>
+          <span class="ms-1">Home</span>
+        </a>
+      </div>
+      <div class="col-3">
+        <a
+          href="{% url 'customer:appointment-list' %}"
+          class="mini-nav-item {% if request.resolver_match.url_name == 'appointment-list' %}active{% endif %} text-decoration-none"
+        >
+          <i class="fas fa-calendar-alt me-1 fa-lg"></i>
+          <span class="ms-1">Appointments</span>
+        </a>
+      </div>
+      <div class="col-3">
+        <a
+          href="{% url 'customer:profile' %}"
+          class="mini-nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %} text-decoration-none"
+        >
+          <i class="fas fa-user me-1 fa-lg"></i>
+          <span class="ms-1">Profile</span>
+        </a>
+      </div>
+      <div class="col-3">
+        <a
+          href="{% url 'customer:notifications' %}"
+          class="mini-nav-item position-relative {% if request.resolver_match.url_name == 'notifications' %}active{% endif %} text-decoration-none {% if unread_count %}text-danger{% endif %}"
+        >
+          <i class="fas fa-bell fa-lg {% if unread_count %}text-danger{% endif %}"></i>
+          {% if notifications_count %}
+          <span class="notification-badge">{{ notifications_count }}</span>
+          {% endif %}
+          <span class="ms-1">Alerts</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}

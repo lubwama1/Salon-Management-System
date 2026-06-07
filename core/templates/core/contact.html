@@ -1,0 +1,105 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% block title %}Contact | {% endblock title %}
+{% block content %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 g-4">
+      <div class="card text-white shadow-sm border-0">
+        <!-- Header -->
+        <div class="card-header text-center mb-5 bg-light bg-gradient">
+          <h2 class="fw-bold mb-3">
+            <i class="fas fa-envelope me-2 text-info"></i>
+            Contact Us
+          </h2>
+          <p class="text-white-50 opacity-75">
+            Have a question, feedback, or just want to say hello? We'd love to
+            hear from you!
+          </p>
+        </div>
+        <div class="card-body p-5">
+          <!-- Contact Form -->
+          <form method="post" action="{% url 'core:contact' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+              <!-- Full Name -->
+              <div class="col-md-12">
+                <div class="form-floating mb-3">
+                  {{ form.full_name|as_crispy_field }}
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="col-md-12">
+                <div class="form-floating mb-3">
+                  {{ form.email|as_crispy_field }}
+                </div>
+              </div>
+
+              <!-- Message -->
+              <div class="col-12">
+                <div class="form-floating mb-4">
+                  {{ form.message|as_crispy_field }}
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-12 text-center">
+                <button
+                  class="btn btn-info btn-md text-dark fw-bold w-100"
+                  type="submit"
+                >
+                  <i class="fas fa-paper-plane me-2"></i>
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Additional Contact Info -->
+          <div class="mt-5 pt-4 border-top border-secondary text-center">
+            <h5 class="mb-4 text-white fw-semibold">Other Ways to Reach Us</h5>
+            <div class="row">
+              <div class="col-md-4 mb-3 mb-md-0">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="fas fa-phone-alt fa-2x text-info mb-2"></i>
+                  <a
+                    href="tel:{{ SITE_PHONENUMBER|default:'1234567890' }}"
+                    class="text-decoration-none text-white-50 small"
+                  >
+                    {{ SITE_PHONENUMBER|default:'123-456-7890' }}
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-4 mb-3 mb-md-0">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="fas fa-envelope fa-2x text-success mb-2"></i>
+                  <a
+                    href="mailto:{{ SITE_EMAIL|default:'admin@elitesaloon.com' }}"
+                    class="text-decoration-none text-white-50 small"
+                  >
+                    {{ SITE_EMAIL|default:'admin@elitesaloon.com' }}
+                  </a>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="d-flex flex-column align-items-center">
+                  <i class="fas fa-map-marker-alt fa-2x text-danger mb-2"></i>
+                  <a
+                    href="{{ SITE_ADDRESS|default:'#' }}"
+                    target="_blank"
+                    class="text-decoration-none text-white-50 small"
+                  >
+                    {{ SITE_ADDRESS|default:'Hamdan St, Abu Dhabi, UAE' }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

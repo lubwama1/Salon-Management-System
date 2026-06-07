@@ -1,0 +1,111 @@
+{% extends 'core/base.html' %}
+{% block title %}Home | {% endblock title %}
+{% block content %}
+
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="col-md-6-mx-auto">
+    {% for message in messages %}
+    <div
+      class="alert alert-{{ message.tags }} alert-dismissible fade show text-center"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+<!-- HERO -->
+<section class="hero-section">
+  <div class="container text-center">
+    <!-- Large Screen -->
+    <div class="d-none d-md-block">
+      <h1>Welcome to <span>{{ SITE_NAME|default:'Elite Salon' }}</span></h1>
+      <p class="text-dark">Where Beauty Meets Perfection. Experience luxury like never before.</p>
+    </div>
+    <div class="d-none d-md-block">
+      {% if request.user.is_superuser %}
+      <a
+        href="{% url 'admin_manager:reviews' %}"
+        class="btn btn-outline-light text-warning"
+        ><i class="fas fa-star me-1"></i>Reviews</a
+      >
+      {% endif %}
+      <a href="{% url 'customer:booking' %}" class="btn btn-gold me-2 ms-2"
+        >Book Now</a
+      >
+      <a href="{% url 'services:service-list' %}" class="btn btn-outline-dark"
+        >View all Services</a
+      >
+    </div>
+    <!-- Small Screen -->
+    <div class="d-block d-md-none">
+      <h3>Welcome to <span>{{ SITE_NAME|default:'Elite Salon' }}</span></h3>
+      <p class="small text-dark">
+        Where Beauty Meets Perfection. Experience luxury like never before.
+      </p>
+    </div>
+
+    <div class="d-inline-block d-md-none mt-3">
+      {% if request.user.is_superuser %}
+      <a
+        href="{% url 'admin_manager:reviews' %}"
+        class="btn btn-outline-light btn-sm text-warning"
+        ><i class="fas fa-star me-1"></i>Reviews</a
+      >
+      {% endif %}
+      <a
+        href="{% url 'customer:booking' %}"
+        class="btn btn-gold me-2 btn-sm ms-2"
+        >Book Now</a
+      >
+      <a
+        href="{% url 'services:service-list' %}"
+        class="btn btn-outline-dark btn-sm"
+        >View all Services</a
+      >
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<div class="container">
+  <div class="section-title mt-4">
+    <h2 class="title-text">Our <span>Service Categories</span></h2>
+    <p class="text-dark">Premium treatments tailored for you</p>
+  </div>
+
+  <div class="row g-4">
+    {% if service_categories %} {% for category in service_categories %}
+    <div class="col-md-4">
+      <div class="card border-0 shadow-sm rounded">
+        <div class="card-body">
+          <h5>{{ category.name }}</h5>
+          <p>{{ category.description }}</p>
+          <a
+            href="{% url 'services:service-by-category' category.slug %}"
+            class="btn btn-sm btn-gold"
+            >View Services</a
+          >
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        No service categories available at the moment.
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

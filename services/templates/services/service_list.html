@@ -1,0 +1,104 @@
+{% extends 'core/base.html' %} {% load number_format %}
+{% block title %}Services | {% endblock %}
+
+{% block og_title %}Salon Services | {% endblock %}
+{% block og_description %}
+Browse professional salon and beauty services with online booking.
+{% endblock %}
+{% block twitter_description %}
+Book salon and beauty services online easily with {{ SITE_NAME }}.
+{% endblock %}
+{% include 'schema/seo.html' %}
+{% block content %}
+<div class="container py-5">
+  <!-- Header -->
+  <div class="text-center mb-5">
+    <h1 class="fw-bold">Our <span class="text-primary">Services</span></h1>
+    <p class="text-muted">Discover our range of premium beauty treatments</p>
+  </div>
+
+  <!-- Search Form -->
+  <form action="" method="get" class="mb-4">
+    <div class="input-group">
+      <span class="input-group-text bg-dark border-end-0" id="search-icon">
+        <i class="fas fa-search"></i>
+      </span>
+      <input
+        type="text"
+        class="form-control border-start-0"
+        placeholder="Search services..."
+        name="search"
+        aria-label="Search"
+        aria-describedby="search-icon"
+        value="{{ query }}"
+      />
+      {% if query %}
+      <a
+        href="{% url 'services:service-list' %}"
+        class="btn btn-outline-secondary border-0"
+        ><i class="fas fa-times"></i
+      ></a>
+      {% endif %}
+      <button class="btn btn-primary" type="submit">
+        <i class="fas fa-search me-1"></i> Search
+      </button>
+    </div>
+  </form>
+
+  <!-- Services Cards -->
+  <div class="row g-4">
+    {% if services %} {% for service in services %}
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 h-100">
+        <div class="card-body d-flex flex-column">
+          <h5 class="card-title fw-bold">{{ service.name }}</h5>
+          <p class="card-text text-muted flex-grow-1">
+            {{ service.description }}
+          </p>
+          <span class="badge bg-primary mb-2"
+            >${{ service.price|floatformat:2 }}</span
+          >
+          <a
+            href="{% url 'customer:booking-with-service' service.slug %}"
+            class="btn btn-outline-primary mt-3"
+          >
+            <i class="fas fa-calendar-alt me-1"></i> Book
+          </a>
+        </div>
+        <div class="mt-3 pt-3 border-top">
+          {% with latest_review=service.reviews.last %} {% if latest_review %}
+
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <small class="fw-semibold text-dark">
+              {{ latest_review.user.username }}
+            </small>
+
+            <a
+              href="{% url 'feedback:service-reviews' service.slug %}"
+              class="btn btn-sm btn-outline-primary rounded-pill ms-2"
+            >
+              <i class="fas fa-star text-warning small"></i> {{ service.reviews.count|short_number }} reviews
+            </a>
+          </div>
+
+          <p class="small text-muted mb-0 fst-italic">
+            “{{ latest_review.comment|truncatewords:10 }}”
+          </p>
+
+          {% endif %} {% endwith %}
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% if is_paginated %}
+    <div class="mt-4">{% include 'core/paginator.html' %}</div>
+    {% endif %} {% else %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">
+        <i class="fas fa-info-circle me-1"></i> No services available at the
+        moment.
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}

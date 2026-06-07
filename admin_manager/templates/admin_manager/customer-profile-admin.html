@@ -1,0 +1,184 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}{{ customer.username|default:'Customer' }} Profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="container">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{ else }{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm rounded-3 border-start border-4 border-success"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-smile-wink me-2 text-success"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <!-- Customer Profile Card -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div
+          class="card-header bg-success bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-friends fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Customer Profile</h4>
+          <p class="small mb-0 opacity-75">
+            Welcome back on, {{ customer.username|default:'Valued Customer' }}'
+            s profile!
+          </p>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="d-flex flex-column align-items-center text-center mb-4">
+            <div
+              class="mx-auto rounded-circle overflow-hidden border border-3 border-success shadow"
+              style="width: 120px; height: 120px"
+            >
+              {% if customer.profile_image %}
+              <img
+                src="{{ customer.profile_image.url }}"
+                class="w-100 h-100"
+                style="object-fit: cover"
+                alt="Customer Photo"
+              />
+              {% else %}
+              <img
+                src="{% static 'images/default.jpg' %}"
+                class="w-100 h-100"
+                style="object-fit: cover"
+                alt="Default Photo"
+              />
+              {% endif %}
+            </div>
+            <h5 class="fw-bold mt-3 mb-1">
+              {{ customer.get_full_name|default:customer.username }}
+            </h5>
+            <span
+              class="badge bg-success bg-opacity-25 text-success rounded-pill px-3 py-2"
+            >
+              <i class="fas fa-star me-1"></i>
+              {{ customer.role|title|default:'Customer' }}
+            </span>
+          </div>
+
+          <!-- Customer Details -->
+          <div class="row g-3 mb-4">
+            <div class="col-12">
+              <div
+                class="bg-light rounded-3 p-3 d-flex justify-content-between align-items-center"
+              >
+                <span class="text-muted"
+                  ><i class="fas fa-user me-2 text-success"></i>Username</span
+                >
+                <span class="fw-semibold"
+                  >{{ customer.username|default:'N/A' }}</span
+                >
+              </div>
+            </div>
+            <div class="col-12">
+              <div
+                class="bg-light rounded-3 p-3 d-flex justify-content-between align-items-center"
+              >
+                <span class="text-muted"
+                  ><i class="fas fa-envelope me-2 text-success"></i>Email
+                  </span
+                >
+                <span class="fw-semibold"
+                  >{{ customer.email|default:'customer@example.com' }}</span
+                >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-calendar-check text-success mb-1"></i>
+                <p class="mb-0 small text-muted">Member Since</p>
+                <small class="fw-semibold">
+                  {{ customer.date_joined|date:"M d, Y"|default:'N/A' }}
+                </small>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-clock text-success mb-1"></i>
+                <p class="mb-0 small text-muted">Last Visit</p>
+                <small class="fw-semibold">
+                  {{ customer.last_login|date:"M d, Y"|default:'Today' }}
+                </small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Loyalty Badge (Customer specific) -->
+          <div
+            class="alert alert-success bg-opacity-10 border-success rounded-3 mb-4 text-center"
+          >
+            <i class="fas fa-gem me-2 text-success"></i>
+            <strong>Loyalty Status:</strong> Gold Member
+            <div class="progress mt-2" style="height: 4px">
+              <div class="progress-bar bg-primary" style="width: 75%"></div>
+            </div>
+            <small class="text-white">5 more bookings to reach Platinum</small>
+          </div>
+
+          <!-- Large Screen -->
+          <div class="d-none d-md-flex gap-2 mb-3">
+            <a
+              href="{% url 'admin_manager:customer-list' %}"
+              class="btn btn-outline-secondary flex-fill"
+            >
+              <i class="fas fa-users me-2"></i>Customer Mangement
+            </a>
+            <a
+              href="{% url 'admin_manager:customer-edit' customer.id %}"
+              class="btn btn-warning flex-fill"
+            >
+              <i class="fas fa-user-edit me-2"></i>Edit Profile
+            </a>
+          </div>
+        </div>
+        <!-- Small Screen -->
+         <div class="d-md-none d-flex gap-2 mb-3">
+            <a
+              href="{% url 'admin_manager:customer-list' %}"
+              class="btn btn-outline-secondary btn-sm flex-fill"
+            >
+              <i class="fas fa-users me-2"></i>Customer Mangement
+            </a>
+            <a
+              href="{% url 'admin_manager:customer-edit' customer.id %}"
+              class="btn btn-warning btn-sm flex-fill"
+            >
+              <i class="fas fa-user-edit me-2"></i>Edit Profile
+            </a>
+          </div>
+        </div>
+        <div
+          class="card-footer bg-success bg-opacity-10 border-0 text-center py-3"
+        >
+          <small class="text-success">
+            <i class="fas fa-headset me-1"></i> Need help?
+            <a href="{% url 'core:contact' %}" class="text-success fw-semibold"
+              >Contact our support</a
+            >
+            Team
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

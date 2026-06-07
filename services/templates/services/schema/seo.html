@@ -1,0 +1,22 @@
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {% for service in services %}
+    {
+      "@type": "Service",
+      "name": "{{ service.name }}",
+      "description": "{{ service.description }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{{ service.get_absolute_url }}",
+      "provider": {
+        "@type": "BeautySalon",
+        "name": "{{ SITE_NAME }}",
+        "url": "{{ request.scheme }}://{{ request.get_host }}"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endblock schema %}

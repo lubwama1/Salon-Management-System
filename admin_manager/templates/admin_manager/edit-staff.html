@@ -1,0 +1,70 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% block title %}Edit {{ staff.user.username|default:'staff' }} profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  {% if messages %}
+  <div class="container">
+    {% for message in messages %}
+    <div
+      class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        role="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-12">
+      <div class="card shadow-sm border-0 rounded-top-4 mt-2">
+        <div
+          class="card-header text-center bg-danger text-white d-flex justify-content-between"
+        >
+          <h4 class="card-title fw-semibold">Edit Your Staff Profile</h4>
+          <span class="badge bg-danger text-light">senstive</span>
+        </div>
+        <div class="card-body">
+          <form
+            action="{% url 'admin_manager:staff-edit' staff.slug %}"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %} {{ form|crispy }}
+            <!-- Large Screen -->
+            <div class="d-grid gap-2 d-none d-md-flex mt-3">
+              <a
+                href="{% url 'admin_manager:staff-detail' staff.slug %}"
+                class="btn btn-outline-secondary flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Update Profile
+              </button>
+            </div>
+            <!-- Small Screen -->
+            <div class="d-grid gap-2 d-md-none mt-3 d-flex mt-3">
+              <a
+                href="{% url 'admin_manager:staff-detail' staff.slug %}"
+                class="btn btn-sm btn-outline-secondary flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-sm btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

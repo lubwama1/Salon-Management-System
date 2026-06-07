@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% block title %}Add Staff | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow-sm border-0 rounded-top-4 mt-2">
+        <div class="card-header text-center bg-primary text-light">
+          <h4 class="card-title fw-semibold">
+            <i class="fas fa-user-plus me-1"></i>Add New Staff Data
+          </h4>
+        </div>
+        <div class="card-body">
+          <form
+            action="{% url 'admin_manager:staff-add' %}"
+            method="post"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %} {{ form|crispy }}
+            <!-- Large Screen -->
+            <div class="d-grid gap-2 d-none d-md-flex mt-3">
+              <a
+                href="{% url 'admin_manager:staff-list' %}"
+                class="btn btn-outline-secondary flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Update Profile
+              </button>
+            </div>
+            <!-- Small Screen -->
+            <div class="d-grid gap-2 d-md-none d-flex mt-3">
+              <a
+                href="{% url 'admin_manager:staff-list' %}"
+                class="btn btn-sm btn-outline-dark flex-fill"
+                ><i class="fas fa-arrow-left me-1"></i>Back</a
+              >
+              <button type="submit" class="btn btn-sm btn-primary flex-fill">
+                <i class="fas fa-save me-1"></i>
+                Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

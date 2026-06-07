@@ -1,0 +1,178 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}Admin Profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm rounded-3 border-start border-4 border-danger"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-shield-alt me-2 text-danger"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class=" col-md-7 col-lg-6">
+      <!-- Admin Profile Card -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div
+          class="card-header bg-danger bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-shield fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Administrator Panel</h4>
+          <p class="small mb-0 opacity-75">
+            Secure access only • {{ profile.full_name|default:'Admin' }}
+          </p>
+        </div>
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <div
+              class="mx-auto rounded-circle overflow-hidden border border-3 border-danger shadow-lg"
+              style="width: 140px; height: 140px; background: #f8f9fa"
+            >
+              {% if profile.admin_profile_image %}
+              <img
+                src="{{ profile.admin_profile_image.url }}"
+                class="w-100 h-100"
+                style="object-fit: cover"
+                alt="Admin Photo"
+              />
+              {% else %}
+              <img
+                src="{% static 'images/default_profile.jpg' %}"
+                class="w-100 h-100"
+                style="object-fit: cover"
+                alt="Default Photo"
+              />
+              {% endif %}
+            </div>
+            <h5 class="fw-bold mt-3 mb-1">
+              {{ profile.full_name|default:'Administrator' }}
+            </h5>
+            <div class="d-flex justify-content-center gap-2 mt-2">
+              <span class="badge bg-danger rounded-pill px-3 py-2">
+                <i class="fas fa-crown me-1"></i>
+                  {{ profile.user.role|upper|default:'ADMIN' }}
+              </span>
+              {% if profile.employee_number %}
+              <span class="badge bg-dark rounded-pill px-3 py-2">
+                <i class="fas fa-id-card me-1"></i>
+                ID: {{ profile.employee_number }}
+              </span>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Admin Details -->
+          <div class="table-responsive mb-4">
+            <table class="table table-sm table-borderless">
+              <tbody>
+                <tr>
+                  <td class="ps-0 text-muted text-start" style="width: 40%">
+                    <i class="fas fa-user me-2 text-danger"></i>Username:
+                  </td>
+                  <td class="fw-semibold text-end">
+                    {{ profile.user.username|default:'N/A' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-0 text-muted text-start">
+                    <i class="fas fa-envelope me-2 text-danger"></i>Email:
+                  </td>
+                  <td class="fw-semibold text-end">
+                    {{ profile.user.email|default:'admin@system.com' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-0 text-muted text-start">
+                    <i class="fas fa-calendar-alt me-2 text-danger"></i>Joined:
+                  </td>
+                  <td class="fw-semibold text-end">
+                    {{ profile.user.date_joined|date:"F d, Y"|default:'N/A' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-0 text-muted text-start">
+                    <i class="fas fa-fingerprint me-2 text-danger"></i>Last
+                    Active:
+                  </td>
+                  <td class="fw-semibold text-end">
+                    {{ profile.user.last_login|date:"M d, Y g:i A"|default:'Today' }}
+                  </td>
+                </tr>
+                <tr>
+                  <td class="ps-0 text-muted text-start">
+                    <i class="fas fa-globe me-2 text-danger"></i>Permissions:
+                  </td>
+                  <td class="fw-semibold text-end">
+                    <span class="badge bg-danger bg-opacity-25 text-danger"
+                      >Full Access</span
+                    >
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Large Screen -->
+          <div class="d-none d-md-flex gap-2">
+            <a
+              href="{% url 'core:home' %}"
+              class="btn btn-outline-secondary flex-fill"
+            >
+              <i class="fas fa-arrow-left me-2"></i>Home
+            </a>
+            <a
+              href="{% url 'admin_manager:admin-profile-edit' %}"
+              class="btn btn-warning flex-fill"
+            >
+              <i class="fas fa-user-edit me-2"></i>Edit Profile
+            </a>
+          </div>
+          <!-- Small Screen -->
+          <div class="d-md-none d-flex gap-2">
+            <a
+              href="{% url 'core:home' %}"
+              class="btn btn-outline-secondary flex-fill btn-sm"
+            >
+              <i class="fas fa-arrow-left me-2"></i>Home
+            </a>
+            <a
+              href="{% url 'admin_manager:admin-profile-edit' %}"
+              class="btn btn-warning flex-fill btn-sm"
+            >
+              <i class="fas fa-user-edit me-2"></i>Edit Profile
+            </a>
+          </div>
+        </div>
+        <!-- Footer with Security Notice -->
+        <div
+          class="card-footer bg-danger bg-opacity-10 border-0 text-center py-3"
+        >
+          <small class="text-danger">
+            <i class="fas fa-lock me-1"></i> This is a secured administrative
+            area
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

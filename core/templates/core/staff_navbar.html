@@ -1,0 +1,157 @@
+<nav class="navbar navbar-expand-lg staff_navbar shadow-sm sticky-top">
+  <div class="container">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold text-dark" href="{% url 'core:home' %}">
+      {% if SITE_LOGO %}
+      <img
+        src="{{ SITE_LOGO }}"
+        alt="SITE LOGO"
+        class="rounded-circle nav-logo me-1"
+      />{{ SITE_NAME|default:'Elite Saloon' }} {% else %}
+      <i class="fas fa-cut me-2 text-dark"></i>
+      {% endif %}
+    </a>
+
+    <!-- Toggle -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#staffNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="staffNavbar">
+      <!-- Left Side Links -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0 barNav">
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold text-white {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
+            href="{% url 'core:home' %}"
+          >
+            <i class="fas fa-home me-1"></i>Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold text-white {% if request.resolver_match.url_name == 'appointments-history' %}active{% endif %}"
+            href="{% url 'staff:appointments-history' %}"
+          >
+            <i class="fas fa-calendar-alt me-1"></i>Appointments
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a
+            class="nav-link fw-semibold {% if unread_count %}text-danger{% else %}text-white{% endif %} {% if request.resolver_match.url_name == 'notifications' %}active{% endif %}"
+            href="{% url 'staff:notifications' %}"
+          >
+            <i
+              class="fas fa-bell me-1 {% if unread_count %}text-danger{% else %}text-white{% endif %} positive-relative"
+            ></i>
+            {% if unread_count %}
+            <span
+              class="position-absolute start-100 top-0 translate-middle badge rounded-pill text-danger"
+              >{{ unread_count }}</span
+            >
+            {% endif %} Notifications
+          </a>
+        </li>
+        <li class="nav-item d-md-none">
+          <a
+            class="nav-link fw-semibold text-white {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+            href="{% url 'staff:profile' %}"
+          >
+            <i class="fas fa-user-edit me-1"></i>Profile
+          </a>
+        </li>
+        <li class="nav-item d-md-none">
+          <a
+            class="nav-link fw-semibold text-danger"
+            href="{% url 'users:logout' %}"
+          >
+            <i class="fas fa-sign-out-alt me-1"></i>Logout
+          </a>
+        </li>
+      </ul>
+
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-2 d-none d-md-block">
+
+        {% if request.user.is_authenticated and request.user.role == STAFF_ROLE %}
+        <!-- Staff Badge -->
+        <li class="nav-item">
+          <span class="badge bg-primary text-light rounded-pill px-3 py-2">
+            <i class="fas fa-user-md me-1"></i>Staff
+          </span>
+        </li>
+
+        <!-- User Dropdown -->
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle text-white fw-semibold"
+            href="#"
+            data-bs-toggle="dropdown"
+          >
+          {% if request.user.staff_profile and request.user.staff_profile.profile_image %}
+            <img
+              src="{{ request.user.staff_profile.profile_image.url }}"
+              alt="Profile"
+              class="rounded-circle me-1"
+              width="30"
+              height="30"
+            />
+            {% else %}
+            <i class="fas fa-user-circle me-1"></i>
+            {% endif %} {{ request.user.username|default:'Staff' }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2">
+            <li>
+              <a class="dropdown-item py-2" href="{% url 'staff:profile' %}">
+                <i class="fas fa-user-edit me-2"></i>My Profile
+              </a>
+            </li>
+            <li>
+              <a
+                class="dropdown-item py-2"
+                href="{% url 'staff:appointments' %}"
+              >
+                <i class="fas fa-calendar-week me-2"></i>My Schedule
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <a
+                class="dropdown-item text-danger py-2"
+                href="{% url 'users:logout' %}"
+              >
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+              </a>
+            </li>
+          </ul>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a
+            class="btn btn-outline-light btn-sm px-3"
+            href="{% url 'users:login' %}"
+          >
+            Login
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            class="btn btn-light btn-sm px-3"
+            href="{% url 'users:register' %}"
+          >
+            Register
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Mini Navbar for Small Devices -->
+{% include 'staff/mini-navbar.html' %}

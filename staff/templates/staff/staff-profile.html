@@ -1,0 +1,146 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}My Profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm rounded-3"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-bell me-2"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7">
+      <!-- Staff Profile Card -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div
+          class="card-header bg-primary bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-md fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Staff Dashboard</h4>
+          <p class="small mb-0 opacity-75">
+            Welcome back, {{ request.user.username|default:'Staff Member' }}
+          </p>
+        </div>
+
+        <div class="card-body p-4">
+          <div class="text-center mb-4">
+            <!-- Profile Image -->
+            <div
+              class="mx-auto rounded-circle overflow-hidden border border-3 border-primary shadow"
+              style="width: 130px; height: 130px"
+            >
+              {% if profile.profile_image %}
+                <img src="{{ profile.profile_image.url }}"
+                    class="w-100 h-100"
+                    style="object-fit: cover"
+                    alt="Staff Photo">
+              {% else %}
+                <img src="{% static 'images/default.jpg' %}"
+                    class="w-100 h-100"
+                    style="object-fit: cover"
+                    alt="Default Photo">
+              {% endif %}
+            </div>
+            <h5 class="fw-bold mt-3 mb-1">
+              {{ profile.full_name|default:'Staff Name' }}
+            </h5>
+            <span
+              class="badge bg-primary bg-opacity-25 text-primary rounded-pill px-3 py-2"
+            >
+              <i class="fas fa-id-card me-1"></i> {{ profile.role|upper|default:'STAFF' }}
+            </span>
+          </div>
+
+          <!-- Staff Details Grid -->
+          <div class="row g-3 mb-4">
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-user-circle text-primary mb-2 fs-5"></i>
+                <p class="mb-0 small text-muted">Username</p>
+                <strong class="small"
+                  >{{ request.user.username|default:'N/A' }}</strong
+                >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-envelope text-primary mb-2 fs-5"></i>
+                <p class="mb-0 small text-muted">Email</p>
+                <strong class="small"
+                  >{{ profile.user.email|default:'staff@example.com' }}</strong
+                >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-calendar-alt text-primary mb-2 fs-5"></i>
+                <p class="mb-0 small text-muted">Joined</p>
+                <strong class="small"
+                  >{{ profile.date_joined|date:"M d, Y"|default:'N/A' }}</strong
+                >
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="bg-light rounded-3 p-3 text-center">
+                <i class="fas fa-barcode text-primary mb-2 fs-5"></i>
+                <p class="mb-0 small text-muted">Employee ID</p>
+                <strong class="small"
+                  >{{ profile.employee_number|default:'ELS000' }}</strong
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-2">
+            <a
+              href="{% url 'core:home' %}"
+              class="btn btn-outline-secondary rounded-pill flex-fill btn-sm"
+            >
+              <i class="fas fa-arrow-left me-2"></i>Back
+            </a>
+            <a
+              href="{% url 'staff:profile-edit' %}"
+              class="btn btn-warning rounded-pill flex-fill btn-sm"
+            >
+              <i class="fas fa-user-edit me-2"></i>Edit Profile
+            </a>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer bg-white border-0 text-center pb-4">
+          <small class="text-muted">
+            <i class="fas fa-clock me-1"></i>
+            Last login: {{ request.user.last_login|date:"M d, Y g:i A"|default:'Today' }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+
+

@@ -1,0 +1,634 @@
+{% extends 'core/base.html' %} {% load static %}
+{% load crispy_forms_tags %}
+{% block title %}Appointment Review | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-9">
+      {% if form.errors %}
+      <div class="alert alert-danger">{{ form.errors }}</div>
+      {% endif %}
+
+      <!-- HEADER  -->
+      <div class="text-center mb-5 d-none d-md-block">
+        <div
+          class="d-inline-block bg-danger px-5 py-2 rounded-pill shadow-sm mb-3"
+        >
+          <i class="fas fa-clipboard-list text-white me-2"></i>
+          <span class="fw-semibold text-white">Admin approval panel</span>
+        </div>
+        <div class="d-flex align-items-center justify-content-center gap-3">
+          <div class="bg-danger bg-opacity-10 rounded-circle p-3">
+            <i class="fas fa-calendar-check text-danger fs-3"></i>
+          </div>
+          <div>
+            <h4 class="fw-bold mb-0">Appointment Review</h4>
+            <p class="text-muted mb-0">
+              Follow the steps to approve this booking — assign staff and
+              confirm decision
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Small Devices -->
+      <div class="d-md-none mb-4">
+        <div class="text-center mb-3">
+          <div
+            class="d-inline-flex align-items-center gap-2 bg-danger text-white px-3 py-2 rounded-pill shadow-sm"
+          >
+            <i class="fas fa-clipboard-list"></i>
+
+            <span class="fw-semibold small"> Admin Approval Panel </span>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="bg-danger-subtle text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+            style="width: 65px; height: 65px"
+          >
+            <i class="fas fa-calendar-check fs-3"></i>
+          </div>
+
+          <h4 class="fw-bold mb-2">Appointment Review</h4>
+
+          <p class="text-muted small mb-0 px-2">
+            Follow the steps to approve this booking, assign staff, and confirm
+            your final decision.
+          </p>
+        </div>
+      </div>
+
+      <!-- STEP 1 -->
+      <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span
+              class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill"
+            >
+              <i class="fas fa-user-check me-1"></i> Step 1: Customer Info
+            </span>
+          </div>
+          <div class="d-flex align-items-center gap-4 flex-wrap flex-sm-nowrap">
+            <div class="flex-shrink-0">
+              <img
+                src="{{ approval.customer_profile_image|default:'/static/images/default.png' }}"
+                alt="customer"
+                class="rounded-circle border border-2 border-white shadow-sm"
+                style="width: 85px; height: 85px; object-fit: cover"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <h5 class="fw-bold mb-1">
+                {{ approval.full_name|default:'Customer Name' }}
+              </h5>
+              <div class="row mt-2">
+                <div class="col-md-6">
+                  <p class="mb-1">
+                    <i class="far fa-envelope text-secondary me-2"></i>
+                    {{ approval.email|default:'Email not provided' }}
+                  </p>
+                </div>
+                <div class="col-md-6">
+                  <p class="mb-0">
+                    <i class="fas fa-phone-alt text-secondary me-2"></i>
+                    +1 {{ approval.phone_number|default:'Phone not provided' }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="fas fa-calendar-alt text-primary fs-5"></i>
+            <span
+              class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill"
+              >Step 2: Appointment Details</span
+            >
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <div class="bg-light rounded-4 p-3 h-100 text-center border">
+                <div class="mb-2">
+                  <i class="fas fa-concierge-bell fs-4 text-primary"></i>
+                </div>
+                <strong class="d-block"
+                  >{{ approval.service|default:'Service Name' }}</strong
+                >
+                <p class="mb-0 mt-1 fw-semibold">
+                  {{ approval.service.description|default:'Service description not provided' }}
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded-4 p-3 h-100 text-center border">
+                <div class="mb-2">
+                  <i class="fas fa-calendar-day fs-4 text-primary"></i>
+                </div>
+                <strong class="d-block">Date</strong>
+                <p class="mb-0 mt-1 fw-semibold">
+                  {{ approval.appointment_date|date:"l, F j, Y"|default:'Date not provided' }}
+                </p>
+                <small class="text-muted"
+                  >({{ approval.appointment_date|timesince|default:'Time not provided' }})
+                </small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded-4 p-3 h-100 text-center border">
+                <div class="mb-2">
+                  <i class="fas fa-clock fs-4 text-primary"></i>
+                </div>
+                <strong class="d-block">Time Slot</strong>
+                <p class="mb-0 mt-1 fw-semibold">
+                  {{ approval.time_slot|default:'Time not provided' }}
+                </p>
+                <small class="text-muted">{{ time_of_day }} slot</small>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 text-muted small border-top pt-3">
+            <i class="fas fa-info-circle me-1"></i> Appointment requested via
+            online booking system
+          </div>
+        </div>
+      </div>
+
+      <!-- CANCELLED SECTION -->
+      {% if approval.status == admin_status.CANCELED %}
+
+      <div class="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden">
+        <!-- Card Header -->
+         <!-- Large Screen -->
+        <div class="card-header bg-danger text-white py-3 px-4 border-0 d-none d-md-flex">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+          >
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-ban fa-lg"></i>
+              <h5 class="mb-0 fw-bold">Appointment Cancellation Details</h5>
+            </div>
+            <span class="badge bg-light text-danger rounded-pill px-3 py-2">
+              <i class="fas fa-clock me-1"></i> Cancelled
+            </span>
+          </div>
+        </div>
+        <!-- Small Screen -->
+        <div class="card-header bg-danger text-white py-3 px-4 border-0 d-md-none">
+          <div
+            class="d-flex align-items-center justify-content-between flex-wrap gap-2"
+          >
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-ban"></i>
+              <h5 class="mb-0 fw-bold small">Appointment Cancellation Details</h5>
+            </div>
+            <span class="badge bg-light text-danger rounded-pill px-3 py-2">
+              <i class="fas fa-clock me-1"></i> Cancelled
+            </span>
+          </div>
+        </div>
+
+        <div class="card-body p-4">
+          <!-- Cancelled By Section -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="bg-light rounded-3 p-3 h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-user-slash text-danger"></i>
+                  <strong class="small text-uppercase text-muted"
+                    >Cancelled By</strong
+                  >
+                </div>
+                <div class="mt-2">
+                  {% if admin_approval.cancelled_by %} {% if admin_approval.cancelled_by.role == 'admin' %}
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-crown text-danger fa-lg"></i>
+                    <div>
+                      <span class="fw-bold d-block"
+                        >{{ admin_approval.cancelled_by.get_full_name|default:admin_approval.cancelled_by.username }}
+                      </span>
+                      <span
+                        class="badge bg-danger bg-opacity-25 text-danger rounded-pill"
+                      >
+                        <i class="fas fa-shield-alt me-1"></i> Administrator
+                      </span>
+                    </div>
+                  </div>
+                  {% elif admin_approval.cancelled_by.role == 'customer' %}
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-user-md text-primary fa-lg"></i>
+                    <div>
+                      <span class="fw-bold d-block"
+                        >{{ admin_approval.cancelled_by.get_full_name|default:admin_approval.cancelled_by.username }}
+                      </span>
+                      <span
+                        class="badge bg-primary bg-opacity-25 text-primary rounded-pill"
+                      >
+                        <i class="fas fa-briefcase me-1"></i> Customer
+                      </span>
+                    </div>
+                  </div>
+                  {% else %}
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-user text-secondary fa-lg"></i>
+                    <div>
+                      <span class="fw-bold d-block"
+                        >{{ admin_approval.cancelled_by.get_full_name|default:admin_approval.cancelled_by.username }}
+                      </span>
+                      <span
+                        class="badge bg-secondary bg-opacity-25 text-secondary rounded-pill"
+                      >
+                        <i class="fas fa-user me-1"></i> {{ admin_approval.cancelled_by.role|default:"Customer" }}
+                      </span>
+                    </div>
+                  </div>
+                  {% endif %} {% else %}
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="fas fa-question-circle text-warning fa-lg"></i>
+                    <div>
+                      <span class="fw-bold d-block">Unknown</span>
+                      <span
+                        class="badge bg-warning bg-opacity-25 text-warning rounded-pill"
+                      >
+                        <i class="fas fa-info-circle me-1"></i> Not Recorded
+                      </span>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Cancellation Date Section -->
+            <div class="col-md-6">
+              <div class="bg-light rounded-3 p-3 h-100">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-calendar-times text-danger"></i>
+                  <strong class="small text-uppercase text-muted"
+                    >Cancelled On</strong
+                  >
+                </div>
+                <div class="mt-2">
+                  <div class="d-flex align-items-center gap-3 flex-wrap">
+                    <div>
+                      <i class="fas fa-calendar-day text-primary me-1"></i>
+                      <span class="fw-semibold"
+                        >{{ admin_approval.cancelled_at|date:"l, F j, Y"|default:"Date not recorded" }}
+                      </span>
+                    </div>
+                    <div>
+                      <i class="fas fa-clock text-primary me-1"></i>
+                      <span class="fw-semibold"
+                        >{{ admin_approval.cancelled_at|date:"g:i A"|default:"Time not recorded" }}
+                      </span>
+                    </div>
+                  </div>
+                  <small class="text-muted d-block mt-2">
+                    <i class="fas fa-hourglass-end me-1"></i>
+                    {% if admin_approval.cancelled_at %}
+                      Cancelled {{ admin_approval.cancelled_at|timesince }} ago
+                    {% else %}
+                      Cancellation time not recorded
+                    {% endif %}
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cancellation Reason Section -->
+          <div class="card border-0 bg-light rounded-3 mb-3">
+            <div class="card-body p-3">
+              <div class="d-flex align-items-start gap-3">
+                <div class="flex-shrink-0">
+                  <div class="rounded-circle bg-danger bg-opacity-25 p-2">
+                    <i class="fas fa-comment-alt text-danger"></i>
+                  </div>
+                </div>
+                <div class="flex-grow-1">
+                  <strong class="d-block mb-2 text-uppercase small text-muted">
+                    <i class="fas fa-info-circle me-1"></i> Cancellation Reason
+                  </strong>
+                  <p class="mb-0 fs-6">
+                    {% if admin_approval.cancellation_reason %}
+                      {{ admin_approval.get_cancellation_reason_display }}
+                    {% else %}
+                      <span class="text-muted fst-italic"
+                        >No reason provided for this cancellation.</span
+                      >
+                    {% endif %}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Information Alert -->
+          <div
+            class="alert alert-warning bg-opacity-10 border-warning rounded-3 mb-0"
+          >
+            <div class="d-flex align-items-start gap-3">
+              <i class="fas fa-exclamation-triangle text-warning fs-5 mt-1"></i>
+              <div class="small">
+                <strong class="d-block mb-1">Important Notice</strong>
+                <span class="text-white">
+                  This appointment has been cancelled and cannot be modified.
+                  The customer has been notified of this cancellation. To
+                  reschedule, please ask the customer to create a new booking.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Footer  -->
+         <!-- Large Screen -->
+        <div class="card-footer bg-white border-0 py-3 px-4 d-none d-md-flex">
+          <div class="d-flex justify-content-end gap-2">
+            <a
+              href="{% url 'admin_manager:dashboard' %}"
+              class="btn btn-outline-secondary btn-sm rounded-pill px-3"
+            >
+              <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+            <button
+              type="button"
+              class="btn bg-danger-subtle text-danger btn-sm rounded-pill px-3"
+              disabled
+            >
+              <i class="fas fa-ban me-1"></i> Cancelled
+            </button>
+          </div>
+        </div>
+        <!-- Small Devices -->
+
+        <div class="card-footer bg-white border-0 py-3 px-4 d-md-none">
+          <div class="d-flex justify-content-center gap-2">
+            <a
+              href="{% url 'admin_manager:dashboard' %}"
+              class="btn btn-outline-secondary btn-sm rounded-pill flex-fill"
+            >
+              <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+            </a>
+            <button
+              type="button"
+              class="btn bg-danger-subtle text-danger btn-sm rounded-pill flex-fill"
+              disabled
+            >
+              <i class="fas fa-ban me-1"></i> Cancelled
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {% else %} {% if approval.status != admin_status.COMPLETED %}
+
+      <form
+        method="post"
+        action="{% url 'admin_manager:appointment-review' approval.id %}"
+        id="appointmentReviewForm"
+        autocomplete="off"
+      >
+        {% csrf_token %}
+
+        <div class="row g-4">
+          <!-- STEP 3 -->
+          <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-2 mb-4">
+                  <i class="fas fa-user-md text-success fs-5"></i>
+                  <span
+                    class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill"
+                    >Step 3: Assign Staff</span
+                  >
+                </div>
+                <div
+                  class="bg-success bg-opacity-10 p-3 rounded-3 mb-3 text-center"
+                >
+                  <strong id="selectedStaffDisplay">
+                    {% if admin_approval.assigned_staff %}
+                      {{ admin_approval.assigned_staff.full_name }}
+                    {% else %}
+                      None assigned
+                    {% endif %}
+                  </strong>
+                </div>
+
+                <!-- Staff Table -->
+                <div
+                  class="table-responsive border table-hover rounded-3"
+                  id="staffTable"
+                >
+                  <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                      <tr class="text-center">
+                        <th class="d-none d-md-block">Name</th>
+                        <th class="d-md-none">Username</th>
+                        <th>Role</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="StaffTable">
+                      {% if staffs %} {% for staff in staffs %}
+                      <tr>
+                        <td class="fw-semibold d-none d-md-block">
+                          {{ staff.full_name|default:'N/A' }}
+                        </td>
+                        <td class="fw-semibold d-md-none">
+                          {{ staff.user.username|default:'N/A' }}
+                        </td>
+                        <td>
+                          <span class="badge bg-secondary rounded-pill"
+                            >{{ staff.role }}</span
+                          >
+                        </td>
+                        <td class="text-center">
+                          <!-- Large Screen -->
+                          <button
+                            type="button"
+                            class="btn btn-outline-success btn-sm select-staff-btn rounded-pill px-3 d-none d-md-inline-flex"
+                            data-staff-id="{{ staff.id }}"
+                            data-staff-name="{{ staff.full_name }}"
+                          >
+                            <i class="fas fa-user-check me-1"></i> Choose
+                          </button>
+                          <!-- Small Screen -->
+                          <button
+                            type="button"
+                            class="btn btn-outline-success btn-sm select-staff-btn d-md-none"
+                            data-staff-id="{{ staff.id }}"
+                            data-staff-name="{{ staff.full_name }}"
+                          >
+                            Choose
+                          </button>
+                        </td>
+                      </tr>
+                      {% endfor %} {% else %}
+                      <tr>
+                        <td colspan="3" class="text-center text-muted py-4">
+                          No staff available
+                        </td>
+                      </tr>
+                      {% endif %}
+                    </tbody>
+                  </table>
+                </div>
+
+                <input
+                  type="hidden"
+                  name="assigned_staff"
+                  id="selectedStaffInput"
+                  value="{{ admin_approval.assigned_staff.id|default:'' }}"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="col-md-6">
+            <div class="card shadow-sm border-0 h-100">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                  <i class="fas fa-gavel text-warning fs-5"></i>
+                  <span
+                    class="badge bg-warning bg-opacity-10 text-dark px-3 py-2 rounded-pill"
+                    >Step 4: Final Decision</span
+                  >
+                </div>
+
+                <div class="mb-3">
+                  {{ form.approved_time_slot.label_tag }} {{ form.approved_time_slot }}
+                  <div class="form-text">
+                    {{ form.approved_time_slot.help_text }}
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="approvalStatus" class="form-label fw-semibold"
+                    ><i class="fas fa-check-circle me-1 text-success"></i>
+                    Appointment Status</label
+                  >
+                  <span>{{ form.get_status_display }}</span>
+                  {{ form.status|as_crispy_field }}
+                  <div class="form-text">
+                    Choose final decision for this appointment request.
+                  </div>
+                </div>
+                <div
+                  id="formErrorsContainer"
+                  class="d-none alert alert-danger"
+                ></div>
+
+                <div
+                  class="card-footer bg-light d-flex justify-content-between align-items-center flex-wrap gap-2"
+                >
+                  <a
+                    href="{% url 'admin_manager:dashboard' %}"
+                    class="btn btn-link text-decoration-none text-muted"
+                  >
+                    <i class="fas fa-arrow-left me-1"></i> Back
+                  </a>
+
+                  <div class="d-flex gap-2">
+                    {% if approval.status != admin_status.CANCELED %}
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#CancelAppointmentModal"
+                      id="cancel-btn"
+                      class="btn btn-outline-danger btn-sm"
+                      data-url="{% url 'admin_manager:appointment-cancel' admin_approval.id %}"
+                      disabled
+                    >
+                      Cancel
+                    </button>
+                    {% endif %}
+
+                    <button type="submit" class="btn btn-success btn-sm px-4">
+                      Submit Decision
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      {% else %}
+
+      <div class="alert alert-success text-center py-3">
+        <i class="fas fa-check-circle me-2"></i>
+        This appointment has been marked as completed. No further actions
+        required.
+      </div>
+
+      {% endif %} {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Appointment Modal -->
+<div
+  class="modal fade"
+  id="CancelAppointmentModal"
+  tabindex="-1"
+  aria-labelledby="CancelAppointmentModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title" id="CancelAppointmentModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Confirm Appointment Cancellation
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form method="post" id="cancelAppointmentForm">
+        {% csrf_token %}
+        <div class="modal-body">
+          <p class="text-center">
+            Are you sure you want to cancel the
+            <strong>{{ approval.service.name }}</strong> appointment?
+          </p>
+          <p class="text-muted small text-center">
+            The customer will be notified of the cancellation.
+          </p>
+
+          <!-- Cancellation reason field -->
+          <div class="mt-3">{{ form.cancellation_reason|as_crispy_field }}</div>
+
+          <input type="hidden" name="cancel_appointment" value="1" />
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            <i class="fas fa-times me-2"></i> Close
+          </button>
+          <button type="submit" class="btn btn-danger">
+            <i class="fas fa-check-circle me-2"></i>
+            Confirm Cancellation
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- END of the Cancel Appointment Modal -->
+{% endblock content %}

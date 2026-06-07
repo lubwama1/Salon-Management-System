@@ -1,0 +1,367 @@
+{% extends 'core/base.html' %}
+{% block title %}Staff Management | {% endblock title %}
+{% block content %}
+
+<div class="container-fluid py-5">
+  {% if messages %}
+  <div class="container">
+    {% for message in messages %}
+    <div
+      class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        role="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="card shadow border-0 rounded-4">
+    <!-- Header -->
+    <div class="card-header bg-primary text-white rounded-top-4">
+      <!-- Large Screen -->
+      <div class="d-none d-lg-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0">
+          <i class="fas fa-user-tie me-2"></i> Elite Staff Management system
+        </h5>
+        <a
+          href="{% url 'admin_manager:staff-add' %}"
+          class="btn btn-sm btn-light"
+        >
+          <i class="fa fa-user-plus me-1"></i> Add Staff
+        </a>
+      </div>
+      <!-- Small Screen -->
+      <div class="d-lg-none d-flex justify-content-between align-items-center">
+        <h6 class="fw-bold mb-0 small">
+          <i class="fas fa-layer-group me-2"></i> Elite Staff Management
+        </h6>
+        <a
+          href="{% url 'admin_manager:staff-add' %}"
+          class="btn btn-sm btn-light"
+        >
+          <i class="fa fa-user-plus me-1"></i> Add Staff
+        </a>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="card-body">
+      <!-- FILTERS -->
+
+      <form action="" method="get" class="mb-4">
+        <div class="input-group">
+          <span
+            class="input-group-text bg-white border-end-0 rounded-start-pill"
+          >
+            <i class="fas fa-search text-muted"></i>
+          </span>
+          <input
+            type="text"
+            name="search_staff"
+            id="staffSearch"
+            value="{{ search_staff_q|default_if_none:'' }}"
+            placeholder="Search by name or employee number..."
+            class="form-control border-start-0 border-end-0 py-2"
+          />
+
+          {% if search_staff_q %}
+          <a
+            href="{% url 'admin_manager:staff-list' %}"
+            class="btn btn-outline-danger rounded-end-pill"
+          >
+            <i class="fas fa-times me-1"></i> Clear
+          </a>
+          {% else %}
+          <button type="submit" class="btn btn-primary rounded-end-pill px-4">
+            <i class="fas fa-search me-1"></i> Search
+          </button>
+          {% endif %}
+        </div>
+      </form>
+      <!-- Large Screen -->
+      <div class="table-responsive d-none d-xl-block">
+        <table
+          class="table table-hover table-bordered align-middle text-center"
+          id="tableStaffBody"
+        >
+          <!-- Table Head -->
+          <thead class="table-light">
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Joined</th>
+              <th>EMP NO</th>
+              <th>D.O.B</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody>
+            {% if staffs %} {% for staff in staffs %}
+            <tr
+              data-name="{{ staff.full_name }}"
+              data-employee-number="{{ staff.employee_number }}"
+            >
+              <td class="fw-semibold">{{ forloop.counter }}</td>
+              <td class="fw-semibold text-primary">
+                {% if staff.full_name|length > 20 %}
+                  {{ staff.user.username|default_if_none:'Not Provided' }}
+                {% else %}
+                  {{ staff.full_name|default_if_none:'Not Provided' }}
+                {% endif %}
+              </td>
+
+              <td class="text-muted">
+                {{ staff.user.email|default:'Not Provided' }}
+              </td>
+
+              <td>{{ staff.phone_number|default:'Not Provided' }}</td>
+
+              <td>
+                <small class="text-muted">
+                  {{ staff.date_joined|date:"M d, Y" }}
+                </small>
+              </td>
+              <td>
+                <span class="badge bg-primary text-white"
+                  >{{ staff.employee_number }}</span
+                >
+              </td>
+              <td>{{ staff.date_of_birth|default:'Not Provided' }}</td>
+              <td>
+                <span class="badge bg-info text-dark"> {{ staff.role }} </span>
+              </td>
+              <td>
+                <span
+                  class="badge {% if staff.user.is_active %}bg-primary{% else %}bg-secondary{% endif %}"
+                >
+                  {{ staff.user.is_active|yesno:"Active,Inactive" }}
+                </span>
+              </td>
+              <td>
+                <a
+                  href="{% url 'admin_manager:staff-detail' staff.slug %}"
+                  class="btn btn-sm btn-outline-primary me-1"
+                >
+                  <i class="fas fa-eye"></i>
+                </a>
+
+                <a
+                  href="{% url 'admin_manager:staff-edit' staff.slug %}"
+                  class="btn btn-sm btn-outline-warning me-1"
+                >
+                  <i class="fas fa-edit"></i>
+                </a>
+
+                <button
+                  type="button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#DeleteStaffModal"
+                  data-staff-id="{{ staff.id }}"
+                  data-staff-name="{{ staff.full_name }}"
+                  class="btn btn-sm btn-outline-danger"
+                  data-url="{% url 'admin_manager:staff-delete' staff.slug %}"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </td>
+            </tr>
+            {% endfor %} {% else %}
+            <tr>
+              <td colspan="8" class="text-muted py-4">
+                <i class="fas fa-info-circle me-2"></i>
+                No staff found.
+              </td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+      </div>
+      <!-- Small Screens -->
+      <div class="d-xl-none">
+        <div class="accordion" id="staffAccordion">
+          {% for staff in staffs %}
+          <div class="accordion-item border-0 mb-2 shadow-sm rounded-3">
+            <h2 class="accordion-header">
+              <button
+                class="accordion-button collapsed bg-light rounded-3"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#collapse{{ staff.id }}"
+              >
+                <div class="d-flex justify-content-between w-100 me-3">
+                  <span class="fw-bold text-white"
+                    >{{ staff.full_name|default:'Name Not Provided' }}</span
+                  >
+                  <span
+                    class="badge {% if staff.user.is_active %}bg-success{% else %}bg-secondary{% endif %} ms-2"
+                  >
+                    {{ staff.user.is_active|yesno:"Active,Inactive" }}
+                  </span>
+                </div>
+              </button>
+            </h2>
+            <div
+              id="collapse{{ staff.id }}"
+              class="accordion-collapse collapse"
+              data-bs-parent="#staffAccordion"
+            >
+              <div class="accordion-body">
+                <div class="mb-2">
+                  <strong
+                    ><i class="fas fa-id-card me-2 text-primary"></i>EMP
+                    No:</strong
+                  >
+                  <span class="badge bg-primary text-white"
+                    >{{ staff.employee_number }}</span
+                  >
+                </div>
+                <div class="mb-2">
+                  <strong
+                    ><i class="fas fa-envelope me-2 text-primary"></i
+                    >Email:</strong
+                  >
+                  <span>{{ staff.user.email|default:'Not Provided' }}</span>
+                </div>
+                <div class="mb-2">
+                  <strong
+                    ><i class="fas fa-phone me-2 text-primary"></i
+                    >Phone:</strong
+                  >
+                  <span>{{ staff.phone_number|default:'Not Provided' }}</span>
+                </div>
+                <div class="mb-2">
+                  <strong
+                    ><i class="fas fa-tag me-2 text-primary"></i>Role:</strong
+                  >
+                  <span class="badge bg-info">{{ staff.role }}</span>
+                </div>
+                <div class="mb-3">
+                  <strong
+                    ><i class="fas fa-calendar me-2 text-primary"></i
+                    >Joined:</strong
+                  >
+                  <span>{{ staff.date_joined|date:"M d, Y" }}</span>
+                </div>
+                <div class="d-flex gap-2">
+                  <a
+                    href="{% url 'admin_manager:staff-edit' staff.slug %}"
+                    class="btn btn-sm btn-outline-warning flex-grow-1"
+                  >
+                    <i class="fas fa-edit me-1"></i> Edit
+                  </a>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-danger flex-grow-1"
+                    data-bs-toggle="modal"
+                    data-bs-target="#DeleteStaffModal"
+                    data-staff-id="{{ staff.id }}"
+                    data-staff-name="{{ staff.full_name }}"
+                    data-url="{% url 'admin_manager:staff-delete' staff.slug %}"
+                  >
+                    <i class="fas fa-trash me-1"></i> Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <div class="alert alert-info text-center">No Staff found.</div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="mt-4">
+        <a href="{% url 'core:home' %}" class="btn btn-lg btn-secondary w-100">
+          <i class="fas fa-arrow-left me-2"></i> Back to Home
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Delete Staff Modal  -->
+<div
+  class="modal fade"
+  id="DeleteStaffModal"
+  tabindex="-1"
+  aria-labelledby="DeleteStaffModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-danger">
+      <div class="modal-header bg-danger text-white">
+        <!-- Large Screen -->
+        <h5 class="d-none d-md-block modal-title" id="DeleteStaffModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Confirm Staff In-Activation
+        </h5>
+        <!-- Small Screen -->
+        <h6 class="d-md-none d-block modal-title" id="DeleteStaffModalLabel">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Confirm Staff In-Activation
+        </h6>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="">Are you sure you want to In-Active this Staff:</p>
+        <p class="fw-bold text-danger" id="staffNameDisplay"></p>
+        <p class="text-muted small">This action cannot be undone.</p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <form method="post" id="deleteStaffForm">
+          {% csrf_token %}
+          <!-- Large Screen -->
+           <div class="d-none d-md-flex">
+            <button type="submit" class="btn btn-danger me-2">
+            <i class="fas fa-times-circle me-1"></i>
+            Confirm In-Activation
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            <i class="fas fa-ban me-1"></i>
+            Cancel
+          </button>
+           </div>
+
+          <!-- Small Screen -->
+           <div class="d-md-none d-flex">
+            <button type="submit" class="btn btn-sm btn-danger flex-fill me-1">
+            <i class="fas fa-times-circle me-1"></i>
+            Confirm In-Activation
+          </button>
+          <button
+            type="button"
+            class="btn btn-sm btn-secondary flex-fill"
+            data-bs-dismiss="modal"
+          >
+            <i class="fas fa-ban me-1"></i>
+            Cancel
+          </button>
+           </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Delete Staff Modal -->
+{% endblock %}

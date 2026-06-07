@@ -1,0 +1,89 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}Appointment Confirmation | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-8">
+      <div class="card shadow-lg border-0">
+        <div class="row g-0">
+          <!-- IMAGE -->
+          <div class="col-md-4 text-center p-3">
+            <img
+              src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% else %}{% static 'default-profile.png' %}{% endif %}"
+              alt="{{ approval.full_name }}"
+              class="img-fluid rounded-circle border"
+              style="height: 200px; width: 200px; object-fit: cover"
+            />
+          </div>
+
+          <!-- CONTENT -->
+          <div class="col-md-8">
+            <div class="card-body">
+              <!-- TITLE -->
+              <h5 class="text-center text-danger mb-4">
+                <i class="fas fa-calendar-check me-2"></i>
+                Your Appointment Review
+              </h5>
+
+              <!-- CUSTOMER INFO -->
+              <h6 class="fw-bold">Customer Information</h6>
+              <p class="mb-1">
+                <strong>Name:</strong> {{ approval.full_name }}
+              </p>
+              <p class="mb-1"><strong>Email:</strong> {{ approval.email }}</p>
+              <p class="mb-3">
+                <strong>Phone:</strong> {{ approval.phone_number }}
+              </p>
+
+              <!-- APPOINTMENT INFO -->
+              <h6 class="fw-bold">Appointment Details</h6>
+              <p class="mb-1">
+                <strong>Service:</strong> {{ approval.service }}
+              </p>
+              <p class="mb-1">
+                <strong>Date:</strong> {{ approval.appointment_date }}
+              </p>
+              <p class="mb-3">
+                <strong>Time:</strong> {{ approval.time_slot }}
+              </p>
+
+              <!-- STATUS -->
+              <p class="mb-3">
+                <strong>Status:</strong>
+                {% if approval.status == "pending" %}
+                <span class="badge bg-warning text-dark">Pending</span>
+                {% elif approval.status == "confirmed" %}
+                <span class="badge bg-success">Confirmed</span>
+                {% elif approval.status == "canceled" %}
+                <span class="badge bg-danger">Cancelled</span>
+                {% endif %}
+              </p>
+
+              <!-- Large Screen -->
+              <div class="text-center d-none d-md-block">
+                <a
+                  href="{% url 'customer:booking' %}"
+                  class="btn btn-primary"
+                >
+                  <i class="fas fa-calendar-plus me-1"></i>
+                  Book Another Appointment
+                </a>
+              </div>
+              <!-- Small Device -->
+                <div class="text-center d-md-none">
+                <a
+                  href="{% url 'customer:booking' %}"
+                  class="btn btn-primary btn-sm"
+                >
+                  <i class="fas fa-calendar-plus me-1"></i>
+                  Book Another Appointment
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

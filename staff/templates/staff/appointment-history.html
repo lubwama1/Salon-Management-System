@@ -1,0 +1,298 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}Appointment History | {% endblock title %}
+{% block content %}
+<div class="container-fluid py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm rounded-3"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-bell me-2 text-primary"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <!-- Header Section -->
+      <div class="text-center mb-4">
+        <div
+          class="d-inline-block bg-primary bg-opacity-10 px-4 py-2 rounded-pill mb-2"
+        >
+          <i class="fas fa-user-md text-primary me-2"></i>
+          <span class="fw-semibold text-primary">Staff Portal</span>
+        </div>
+        <h4 class="fw-bold mt-2">
+          <i class="fas fa-calendar-alt text-primary me-2"></i>
+          Staff Appointment History
+        </h4>
+        <p class="text-muted">View all appointments assigned to you</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="row g-3 mb-4 flex-grow-1">
+        <div class="col">
+          <div class="card bg-primary text-white border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-white-50 mb-0">Total</h6>
+                  <h2 class="mb-0 fw-bold">
+                    {{ appointments|length|default:"0" }}
+                  </h2>
+                  <small>Appointments</small>
+                </div>
+                <i class="fas fa-calendar-alt fa-2x opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card bg-success text-white border-0 shadow-sm">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="text-white-50 mb-0">Completed</h6>
+                  <h2 class="mb-0 fw-bold">
+                    {{ completed_appointments|length }}
+                  </h2>
+                  <small>Done</small>
+                </div>
+                <i class="fas fa-check-double fa-2x opacity-50"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Card -->
+      <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white py-3 px-4">
+          <div
+            class="d-flex justify-content-between align-items-center flex-wrap gap-2"
+          >
+            <h5 class="card-title mb-0 fw-semibold">
+              <i class="fas fa-list-check me-2"></i>My Assigned Appointments
+            </h5>
+            <span class="badge bg-light text-primary rounded-pill px-3 py-2">
+              <i class="fas fa-user-md me-1"></i> Staff View
+            </span>
+          </div>
+        </div>
+
+        <div class="card-body p-0">
+          <form action="" method="get" class="p-3 border-bottom">
+            <div class="input-group input-group-sm">
+                <span class="input-group-text bg-white">
+                  <i class="fas fa-search text-muted"></i>
+                </span>
+
+                <input
+                  type="text"
+                  class="form-control border-start-0 border-end-0"
+                  id="searchFilter"
+                  name="search_appointment"
+                  value="{{ search_appointment_q|default_if_none:'' }}"
+                  placeholder="Search by customer name..."
+                />
+
+                {% if search_appointment_q %}
+                <a
+                  href="{% url 'admin_manager:dashboard' %}"
+                  class="btn btn-outline-danger"
+                >
+                  <i class="fas fa-times"></i>
+                </a>
+                {% else %}
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-search"></i>
+                </button>
+                {% endif %}
+              </div>
+          </form>
+
+          <!-- Staff Table Large Device -->
+          <div class="table-responsive d-none d-lg-block">
+            <table class="table table-hover table-striped mb-0 table-bordered">
+              <thead class="table-primary">
+                <tr class="text-center">
+                  <th><i class="fas fa-hashtag me-1"></i>S/N</th>
+                  <th><i class="fas fa-calendar-day me-1"></i>Date & Time</th>
+                  <th><i class="fas fa-user me-1"></i>Customer</th>
+                  <th><i class="fas fa-phone me-1"></i>Phone</th>
+                  <th><i class="fas fa-spa me-1"></i>Service</th>
+                  <th><i class="fas fa-tag me-1"></i>Status</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                {% for appointment in appointments %}
+                <tr
+                  data-status="{{ appointment.status|lower }}"
+                  data-name="{{ appointment.customer_appointment.full_name|lower }}"
+                >
+                  <td class="fw-semibold">{{ forloop.counter }}</td>
+                  <td class="fw-semibold">
+                    <i class="far fa-clock text-muted me-1"></i>
+                    {{ appointment.customer_appointment.appointment_date|date:"M d, Y"|default:'Not Provided' }} - {{ appointment.approved_time_slot|time:"h:i A"|default:appointment.customer_appointment.time_slot }}
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <i class="fas fa-user-circle text-primary"></i>
+                      {{ appointment.customer_appointment.full_name }}
+                    </div>
+                  </td>
+                  <td>
+                    {{ appointment.customer_appointment.phone_number|default:"N/A" }}
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-secondary bg-opacity-25 text-dark rounded-pill px-3 py-2"
+                    >
+                      {{ appointment.customer_appointment.service }}
+                    </span>
+                  </td>
+                  <td class="text-center">
+                    {% if appointment.status == 'completed' %}
+
+                    <span class="badge bg-success rounded-pill px-3 py-2"
+                      ><i class="fas fa-check-double me-1"></i>{{ appointment.status|title }}</span
+                    >
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-5">
+                    <i
+                      class="fas fa-calendar-times fa-3x mb-3 d-block text-muted opacity-50"
+                    ></i>
+                    No completed appointments yet.
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Small Screen -->
+          <div class="d-xl-none">
+            <div class="row g-3">
+              {% if appointments %} {% for appointment in appointments %}
+              <div class="col-12 col-md-6">
+                <div class="card h-100 shadow-sm border-0 rounded-3 mb-3">
+                  <div class="card-header bg-light bg-gradient border-0 pt-3">
+                    <div
+                      class="d-flex justify-content-between align-items-start"
+                    >
+                      <div>
+                        <h6 class="fw-bold mb-1 text-White">
+                          {{ appointment.customer_appointment.full_name|default:appointment.customer_appointment.user.username }}
+                        </h6>
+                      </div>
+
+                      {% if appointment.status == 'completed' %}
+
+                      <span class="badge bg-success rounded-pill px-3 py-2"
+                        ><i class="fas fa-check-double me-1 fa-2xs"></i>{{ appointment.status|title }}</span
+                      >
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <div class="card-body pt-2">
+                    <div
+                      class="mb-2 d-flex justify-content-between align-items-center"
+                    >
+                      <span class="text-muted">
+                        <i class="fas fa-id-card me-1 text-primary"></i>
+                        Date & Time
+                      </span>
+
+                      <span>
+                        {{ appointment.customer_appointment.appointment_date|date:"M d, Y"|default:'Not Provided' }} - {{ appointment.approved_time_slot|time:"h:i A"|default:appointment.customer_appointment.time_slot }}
+                      </span>
+                    </div>
+                    <div
+                      class="mb-2 d-flex justify-content-between align-items-center"
+                    >
+                      <span class="text-muted">
+                        <i class="fas fa-id-card me-1 text-primary"></i>
+                        Service
+                      </span>
+
+                      <span>
+                        {{ appointment.customer_appointment.service }}
+                      </span>
+                    </div>
+                    <div
+                      class="mb-2 d-flex justify-content-between align-items-center"
+                    >
+                      <span class="text-muted">
+                        <i class="fas fa-id-card me-1 text-primary"></i>
+                        Phone
+                      </span>
+
+                      <span>
+                        {{ appointment.customer_appointment.phone_number|default:'No Phone Number' }}
+                      </span>
+                    </div>
+
+                    <div class="small text-muted">
+                      <div
+                        class="mb-2 d-flex justify-content-between align-items-center"
+                      >
+                        <span>
+                          <i
+                            class="fas fa-envelope me-2 text-primary"
+                            style="width: 16px"
+                          ></i>
+                          Email
+                        </span>
+
+                        <span>
+                          {{ appointment.customer_appointment.user.email|default:'Email Not Provided'|truncatechars:25 }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %} {% if page_obj %}
+              <div class="mt-4">{% include 'core/paginator.html' %}</div>
+              {% endif %} {% else %}
+              <div class="col-12">
+                <div class="alert alert-info text-center py-5">
+                  <i
+                    class="fas fa-calendar-times fa-3x mb-3 d-block text-muted opacity-50"
+                  ></i>
+                  <p>No completed appointments yet.</p>
+                </div>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- Pagination -->
+          {% if is_paginated %} {% include 'core/paginator.html' %} {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

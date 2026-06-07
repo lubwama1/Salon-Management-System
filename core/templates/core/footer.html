@@ -1,0 +1,46 @@
+<footer class="footer py-5 border-top">
+  <div class="container">
+    <!-- Social Links -->
+    <div class="social-section mb-4">
+      <div class="social-links d-flex justify-content-center gap-4 flex-wrap">
+        <a href="#" class="social-circle github" aria-label="GitHub">
+          <i class="fab fa-github"></i>
+        </a>
+        <a href="#" class="social-circle linkedin" aria-label="LinkedIn">
+          <i class="fab fa-linkedin-in"></i>
+        </a>
+        <a href="#" class="social-circle instagram" aria-label="Instagram">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="#" class="social-circle facebook" aria-label="Facebook">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="#" class="social-circle youtube" aria-label="YouTube">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="footer-links mb-4">
+      <div class="d-flex justify-content-center gap-4 flex-wrap">
+        <a href="{% url 'core:about-us' %}" class="footer-link">About</a>
+        <a href="{% url 'services:service-list' %}" class="footer-link"
+          >Services</a
+        >
+        <a href="{% url 'core:contact' %}" class="footer-link">Contact</a>
+        <a href="{% url 'core:privacy-policy' %}" class="footer-link"
+          >Privacy</a
+        >
+      </div>
+    </div>
+
+    <!-- Copyright -->
+    <div class="copyright text-center">
+      <p class="mb-0">
+        &copy; <span id="current-year">2026</span> Elite Salon | All Rights
+        Reserved
+      </p>
+    </div>
+  </div>
+</footer>

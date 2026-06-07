@@ -1,0 +1,132 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Edit Profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-12 col-md-8 col-lg-6">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show shadow-sm rounded-3 border-start border-4 border-danger"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-shield-alt me-2 text-danger"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class=" col-md-7 col-lg-6">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div
+          class="card-header bg-danger bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-shield fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Edit Administrator Profile</h4>
+          <p class="small mb-0 opacity-75">
+            Update your admin credentials and information
+          </p>
+        </div>
+
+        <div class="card-body p-4">
+          <form
+            action="{% url 'admin_manager:admin-profile-edit' %}"
+            method="post"
+            enctype="multipart/form-data"
+            id="adminEditForm"
+          >
+            {% csrf_token %}
+            <div class="text-center mb-4">
+              <div
+                class="mx-auto rounded-circle overflow-hidden border border-3 border-danger shadow-sm mb-3"
+                style="width: 120px; height: 120px; background: #f8f9fa"
+              >
+                <img
+                  id="adminImagePreview"
+                  src="{% if form.instance.admin_profile_image %}{{ form.instance.admin_profile_image.url }}{% else %}{% static 'images/default_profile.jpg' %}{% endif %}"
+                  class="w-100 h-100"
+                  style="object-fit: cover"
+                  alt="Admin Photo"
+                />
+              </div>
+              <div class="small text-muted">
+                <i class="fas fa-info-circle me-1 text-danger"></i> Click on
+                image field below to upload
+              </div>
+            </div>
+
+            <div class="mb-3">{{ form|crispy }}</div>
+            <!-- Security Note -->
+            <div
+              class="alert alert-danger bg-opacity-10 border-danger rounded-3 mb-4"
+            >
+              <div class="d-flex gap-2 align-items-start">
+                <i class="fas fa-lock text-danger mt-1"></i>
+                <small class="text-muted"
+                  >Changes to your admin profile will be logged for security
+                  purposes.</small
+                >
+              </div>
+            </div>
+            <!-- Large Screen -->
+            <div class="d-none d-md-flex gap-3 mt-3">
+              <a
+                href="{% url 'admin_manager:admin-profile' %}"
+                class="btn btn-outline-secondary px-4 flex-fill"
+              >
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </a>
+              <button
+                type="submit"
+                class="btn btn-primary px-4 flex-fill"
+              >
+                <i class="fas fa-save me-2"></i>Update Profile
+              </button>
+            </div>
+            <!-- Small Screen -->
+             <div class="d-md-none d-flex gap-3 mt-3">
+              <a
+                href="{% url 'admin_manager:admin-profile' %}"
+                class="btn btn-outline-secondary btn-sm flex-fill"
+              >
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </a>
+              <button
+                type="submit"
+                class="btn btn-primary btn-sm flex-fill"
+              >
+                <i class="fas fa-save me-2"></i>Update Profile
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div
+          class="card-footer bg-danger bg-opacity-10 border-0 text-center py-3"
+        >
+          <small class="text-danger">
+            <i class="fas fa-fingerprint me-1"></i> All changes are encrypted
+            and secure
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

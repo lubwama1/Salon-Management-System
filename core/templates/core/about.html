@@ -1,0 +1,295 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}About Us | {% endblock title %}
+{% block content %}
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <!-- Hero Section -->
+      <div
+        class="card border-0 d-none d-md-block shadow-lg rounded-4 mb-5 overflow-hidden about-hero-section"
+      >
+        <div class="position-relative">
+          <div
+            class="position-absolute top-0 start-0 w-100 h-100"
+            style="{% if SITE_LOGO %}background-image: url('{{ SITE_LOGO }}'); background-size: cover; background-position: center;{% else %}background: #111;{% endif %}"
+          ></div>
+          <div
+            class="position-absolute top-0 start-0 w-100 h-100 bg-light bg-opacity-25"
+          ></div>
+          <div
+            class="card-body py-5 px-4 px-md-5 text-center text-white position-relative"
+          >
+            <div class="mb-0">
+              <div
+                class="bg-white bg-opacity-10 border border-light border-opacity-25 shadow-lg d-inline-flex align-items-center justify-content-center rounded-circle mb-4"
+                style="width: 90px; height: 90px; backdrop-filter: blur(6px)"
+              >
+                <i class="fas fa-cut fa-2x text-white"></i>
+              </div>
+            </div>
+            <h1 class="display-4 fw-bold mb-3 text-white">
+              {{ SITE_NAME|default:'Elite Salon' }}
+            </h1>
+            <p
+              class="lead mb-0 mx-auto text-dark"
+              style="max-width: 700px; line-height: 1.8"
+            >
+              Modern beauty and grooming destination dedicated to helping
+              clients look confident, stylish, and refreshed every day.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- Our Mission Section -->
+      <div class="row g-4 mb-5">
+        <div
+          class="col-md-6 animate__animated animate__fadeInLeft animate__delay-1s"
+        >
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div
+                class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-3"
+              >
+                <i class="fas fa-bullseye text-primary fs-2"></i>
+              </div>
+              <h3 class="fw-bold mb-3">Our Mission</h3>
+              <p class="text-muted mb-0">
+                To provide professional salon and grooming services in a
+                comfortable environment while delivering outstanding customer
+                care and helping every client express their unique style.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="col-md-6 animate__animated animate__fadeInRight animate__delay-1s"
+        >
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+              <div
+                class="bg-success bg-opacity-10 rounded-circle p-3 d-inline-block mb-3"
+              >
+                <i class="fas fa-eye text-success fs-2"></i>
+              </div>
+              <h3 class="fw-bold mb-3">Our Vision</h3>
+              <p class="text-muted mb-0">
+                To become the leading salon destination recognized for
+                excellence, innovation, and creating memorable beauty
+                experiences for every client.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- What We Offer Section -->
+      <div class="card border-0 shadow-sm rounded-4 mb-5 offer-on-scroll">
+        <div class="card-body">
+          <div class="text-center mb-4">
+            <div
+              class="bg-warning bg-opacity-10 rounded-circle p-3 d-inline-block mb-2 animate__animated animate__fadeInDown"
+            >
+              <i class="fas fa-gift text-warning fs-2"></i>
+            </div>
+            <h2 class="fw-bold animate__animated animate__fadeInDown">
+              What We Offer
+            </h2>
+            <p
+              class="text-muted animate__animated animate__fadeInUp animate__delay-1s"
+            >
+              Premium services tailored to your needs
+            </p>
+          </div>
+
+          <div class="row g-3">
+            <div
+              class="col-md-4 offer-scroll"
+              data-animation="zoomIn"
+              data-delay="0.1s"
+            >
+              <div
+                class="bg-light rounded-3 p-4 text-center h-100 service-card"
+              >
+                <i class="fas fa-cut text-primary fs-1 mb-3 service-icon"></i>
+                <h5 class="fw-bold">Hair Services</h5>
+                <p class="text-muted small mb-0">
+                  Professional haircuts, styling, coloring, and treatments
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-md-4 offer-scroll"
+              data-animation="zoomIn"
+              data-delay="0.2s"
+            >
+              <div
+                class="bg-light rounded-3 p-4 text-center h-100 service-card"
+              >
+                <i class="fas fa-smile text-success fs-1 mb-3 service-icon"></i>
+                <h5 class="fw-bold">Skincare & Facials</h5>
+                <p class="text-muted small mb-0">
+                  Customized facials, peels, and beauty treatments
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-md-4 offer-scroll"
+              data-animation="zoomIn"
+              data-delay="0.3s"
+            >
+              <div
+                class="bg-light rounded-3 p-4 text-center h-100 service-card"
+              >
+                <i
+                  class="fas fa-calendar-check text-info fs-1 mb-3 service-icon"
+                ></i>
+                <h5 class="fw-bold">Online Booking</h5>
+                <p class="text-muted small mb-0">
+                  Easy appointment scheduling with experienced stylists
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why Choose Us Section -->
+      <div
+        class="card border-0 shadow-sm rounded-4 mb-5 bg-primary bg-opacity-10"
+      >
+        <div class="card-body text-center">
+          <h2 class="fw-bold mb-4">Why Choose Elite Salon?</h2>
+          <div class="row g-3">
+            <div class="col-sm-6 col-lg-3">
+              <div class="p-3">
+                <i class="fas fa-star text-warning fs-2 mb-2"></i>
+                <h6 class="fw-bold mb-0">5+ Years</h6>
+                <small class="text-muted">Of Excellence</small>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="p-3">
+                <i class="fas fa-user-md text-primary fs-2 mb-2"></i>
+                <h6 class="fw-bold mb-0">Expert Staff</h6>
+                <small class="text-muted">Certified Professionals</small>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="p-3">
+                <i class="fas fa-calendar-heart text-success fs-2 mb-2"></i>
+                <h6 class="fw-bold mb-0">Flexible Hours</h6>
+                <small class="text-muted">Convenient Scheduling</small>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3">
+              <div class="p-3">
+                <i class="fas fa-smile-wink text-info fs-2 mb-2"></i>
+                <h6 class="fw-bold mb-0">100% Satisfaction</h6>
+                <small class="text-muted">Guaranteed Results</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Meet The Team Section -->
+      <div class="card border-0 shadow-lg rounded-4 mb-5">
+        <div class="card-header bg-transparent border-0 text-center pt-4">
+          <div
+            class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-block mb-2 animate__animated animate__fadeInDown"
+          >
+            <i class="fas fa-users text-primary fs-2"></i>
+          </div>
+          <h2
+            class="fw-bold mb-0 animate__animated animate__fadeInDown animate__delay-1s"
+          >
+            Meet The Team
+          </h2>
+          <p
+            class="text-muted animate__animated animate__fadeInUp animate__delay-1s"
+          >
+            Passionate professionals dedicated to your beauty
+          </p>
+        </div>
+        <div class="card-body">
+          <div class="row g-4">
+            {% if team_members %}
+            {% for member in team_members %}
+            <div
+              class="col-md-4 team-scroll"
+              data-animation="flipInY"
+              data-delay="0.1s"
+            >
+              <div
+                class="text-center p-4 rounded-3 bg-light h-100 team-card animate-on-scroll"
+              >
+                <div
+                  class="team-avatar rounded-circle overflow-hidden mx-auto p-3 mb-3 team-icon"
+                >
+                  {% if member.image %}
+                  <img src="{{ member.image.url }}" alt="{{ member.name }}" class="shadow-sm img-fluid h-100 w-100 rounded-circle object-fit-cover">
+                  {% else %}
+                  <img src="{% static 'images/default.jpg' %}" alt="{{ member.name }}" class="shadow-sm img-fluid h-100 w-100 rounded-circle object-fit-cover">
+                  {% endif %}
+                </div>
+                <h4 class="fw-bold mb-1">{{ member.name }}</h4>
+                <p class="text-white mb-2 badge {% if member.role == 'founder' %}bg-danger {% elif member.role == 'support' %}bg-primary bg-opacity-10{% else %}bg-warning{% endif %}">{{ member.get_role_display }}</p>
+                <hr class="my-2" />
+                <small class="text-muted"
+                  >{{ member.experience_years }} years of experience</small
+                >
+              </div>
+            </div>
+            {% endfor %}
+            {% else %}
+              <div class="col-12">
+                <p class="text-muted text-center alert alert-info">No Team Available at the moment</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body text-center bg-secondary bg-gradient">
+          <h5 class="fw-bold mb-3 text-white">
+            <i class="fas fa-calendar-check me-2"></i>Ready to Experience Elite
+            Salon?
+          </h5>
+          <p class="mb-4 text-white opacity-75">
+            Book your appointment today and let our team take care of your
+            style.
+          </p>
+          <div class="d-flex justify-content-center gap-3 flex-wrap">
+            {% if request.user.is_authenticated %}
+            <a
+              href="{% url 'customer:booking' %}"
+              class="btn btn-outline-dark btn-lg rounded fw-semibold"
+            >
+              <i class="fas fa-calendar-check me-2 text-success"></i> Book
+              Appointment
+            </a>
+            {% else %}
+            <a
+              href="{% url 'users:signup' %}"
+              class="btn btn-light btn-lg rounded-pill fw-semibold"
+            >
+              <i class="fas fa-user-plus me-2 text-success"></i> Create Account
+            </a>
+            <a
+              href="{% url 'users:login' %}"
+              class="btn btn-outline-light btn-lg rounded-pill"
+            >
+              <i class="fas fa-sign-in-alt me-2"></i> Login
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,465 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}Appointment History | {% endblock title %}
+{% block content %}
+<div class="container-fluid py-5">
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      {% for message in messages %}
+      <div
+        class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show text-center rounded-3 shadow-sm border-start border-4 border-success"
+        role="alert"
+      >
+        <i class="fas fa-bell me-2 text-success"></i>{{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="text-center mb-5">
+        <div
+          class="d-inline-block bg-success bg-opacity-10 px-4 py-2 rounded-pill mb-3"
+        >
+          <i class="fas fa-calendar-alt text-success me-2"></i>
+          <span class="fw-semibold text-success">Your Booking History</span>
+        </div>
+        <h2 class="fw-bold display-6 mb-2">
+          <span class="text-success">Appointment</span> History
+        </h2>
+        <p class="text-muted">
+          View and manage all your past and upcoming appointments
+        </p>
+      </div>
+
+      {% if appointments %}
+      <div class="row g-3 mb-5">
+        <div class="col-md-3 col-6">
+          <div
+            class="card border-0 bg-success bg-opacity-10 rounded-4 text-center p-3"
+          >
+            <i class="fas fa-calendar-check text-success fs-2 mb-2"></i>
+            <h3 class="fw-bold mb-0 text-success">{{ total_appointments }}</h3>
+            <small class="text-muted">Total Bookings</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div
+            class="card border-0 bg-warning bg-opacity-10 rounded-4 text-center p-3"
+          >
+            <i class="fas fa-hourglass-half text-warning fs-2 mb-2"></i>
+            <h3 class="fw-bold mb-0 text-warning">{{ pending_count }}</h3>
+            <small class="text-muted">Pending</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div
+            class="card border-0 bg-success bg-opacity-10 rounded-4 text-center p-3"
+          >
+            <i class="fas fa-check-circle text-success fs-2 mb-2"></i>
+            <h3 class="fw-bold mb-0 text-success">{{ approved_count }}</h3>
+            <small class="text-muted">Approved</small>
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <div
+            class="card border-0 bg-success-emphasis bg-opacity-10 rounded-4 text-center p-3"
+          >
+            <i class="fas fa-check-double text-success fs-2 mb-2"></i>
+            <h3 class="fw-bold mb-0 text-success">{{ completed_count }}</h3>
+            <small class="text-muted">Completed</small>
+          </div>
+        </div>
+      </div>
+      {% endif %} {% if appointments %}
+      <div class="accordion" id="appointmentAccordion">
+        {% for appointment in appointments %}
+        <div
+          class="accordion-item border-0 shadow-lg rounded-4 mb-4 overflow-hidden"
+        >
+          <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+            <button
+              class="accordion-button {% if not forloop.first %}collapsed{% endif %} p-4"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapse{{ forloop.counter }}"
+              aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-controls="collapse{{ forloop.counter }}"
+              style="
+                background: linear-gradient(135deg, #ffffff 0%, #000000 100%);
+              "
+            >
+              <div
+                class="d-flex justify-content-between align-items-center w-100 me-3 flex-wrap gap-3"
+              >
+                <div class="d-flex align-items-center gap-3">
+                  <div class="bg-transparent bg-opacity-10 rounded-circle p-3">
+                    <i class="fas fa-spa text-primary fs-4"></i>
+                  </div>
+                  <div class="text-start">
+                    <span class="fw-bold fs-5 text-primary"
+                      >{{ appointment.service.name }}</span
+                    >
+                    <br />
+                    <small class="text-secondary"
+                      ><i class="fas fa-hashtag me-1"></i>Booking #{{ appointment.id }}
+                    </small>
+                  </div>
+                </div>
+
+                <div class="text-center d-none d-md-block">
+                  <span class="badge bg-light text-dark rounded-pill px-3 py-2">
+                    <i class="fas fa-calendar-alt text-success me-1"></i>
+                    {{ appointment.appointment_date|date:"M d, Y" }}
+                  </span>
+                </div>
+
+                <div class="d-none d-md-flex align-items-center gap-3">
+                  <span
+                    class="badge {% if appointment.status == 'approved' %}bg-success{% elif appointment.status == 'rejected' %}bg-danger{% elif appointment.status == 'pending' %}bg-warning text-dark{% elif appointment.status == 'completed' %}bg-success{% elif appointment.status == 'canceled' %}bg-danger-subtle text-danger{% else %}bg-secondary{% endif %} rounded-pill px-4 py-2 fs-6"
+                  >
+                    {% if appointment.status == 'approved' %}<i
+                      class="fas fa-check-circle me-1"
+                    ></i>
+
+                    {% elif appointment.status == 'rejected' %}<i
+                      class="fas fa-times-circle me-1"
+                    ></i>
+
+                    {% elif appointment.status == 'pending' %}<i
+                      class="fas fa-hourglass-half me-1"
+                    ></i>
+
+                    {% elif appointment.status == 'completed' %}<i
+                      class="fas fa-check-double me-1"
+                    ></i>
+
+                    {% elif appointment.status == 'canceled' %}<i
+                      class="fas fa-ban me-1"
+                    ></i>
+
+                    {% endif %} {{ appointment.status|title }}
+                  </span>
+                  <i class="fas fa-chevron-down text-muted"></i>
+                </div>
+              </div>
+            </button>
+          </h2>
+
+          <div
+            id="collapse{{ forloop.counter }}"
+            class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+            data-bs-parent="#appointmentAccordion"
+          >
+            <div class="accordion-body p-4 bg-transparent">
+              <div class="row g-4">
+                <div class="col-md-4">
+                  <div
+                    class="bg-success bg-opacity-10 rounded-4 p-4 text-center h-100"
+                  >
+                  <!-- Small Device appointment Status -->
+                  <div class="d-md-none align-items-center gap-3 mb-3">
+                    <span
+                      class="badge {% if appointment.status == 'approved' %}bg-success{% elif appointment.status == 'rejected' %}bg-danger{% elif appointment.status == 'pending' %}bg-warning text-dark{% elif appointment.status == 'completed' %}bg-success{% elif appointment.status == 'canceled' %}bg-danger-subtle text-danger{% else %}bg-secondary{% endif %} rounded-pill px-4 py-2 fs-6"
+                    >
+                      {% if appointment.status == 'approved' %}<i
+                        class="fas fa-check-circle me-1"
+                      ></i>
+
+                      {% elif appointment.status == 'rejected' %}<i
+                        class="fas fa-times-circle me-1"
+                      ></i>
+
+                      {% elif appointment.status == 'pending' %}<i
+                        class="fas fa-hourglass-half me-1"
+                      ></i>
+
+                      {% elif appointment.status == 'completed' %}<i
+                        class="fas fa-check-double me-1"
+                      ></i>
+
+                      {% elif appointment.status == 'canceled' %}<i
+                        class="fas fa-ban me-1"
+                      ></i>
+
+                      {% endif %} {{ appointment.status|title }}
+                    </span>
+
+                  </div>
+
+                    <i class="fas fa-calendar-alt text-success fs-1 mb-2"></i>
+                    <h6 class="text-muted">Appointment Date</h6>
+                    <p class="fw-bold text-success">
+                      {{ appointment.appointment_date|date:"l, F j, Y" }}
+                    </p>
+                    <hr />
+                    <div class="fw-semibold">
+                      <i class="fas fa-clock text-success me-1"></i> {{ appointment.time_slot|time:"h:i A" }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="bg-light rounded-4 p-4 text-center h-100">
+                    <i class="fas fa-concierge-bell text-success fs-1 mb-2"></i>
+                    <h6 class="text-muted">Service Details</h6>
+                    <p class="mb-1">
+                      <strong>Category:</strong> {{ appointment.service.service_category }}
+                    </p>
+                    <p class="mb-1">
+                      <strong>Price:</strong>
+                      <span class="text-success fw-bold"
+                        >${{ appointment.service.price|floatformat:2 }}
+                      </span>
+                    </p>
+                    {% if appointment.admin_approval and appointment.admin_approval.assigned_staff and appointment.status != 'canceled' %}
+
+                    <hr class="my-3" />
+
+                    <div>
+                      <h6 class="text-white mb-2">Assigned Staff</h6>
+                      <div class="flex-shrink-0">
+                        <img
+                          src="{% if appointment.admin_approval.assigned_staff.profile_image %}{{ appointment.admin_approval.assigned_staff.profile_image.url }}{% else %}{% static 'default.jpg' %}{% endif %}"
+                          alt="Staff Image"
+                          class="img-fluid rounded-circle"
+                          style="width: 100px; height: 100px; object-fit: cover"
+                        />
+                      </div>
+                      <span class="fw-semibold"
+                        >{{ appointment.admin_approval.assigned_staff.full_name }}
+                      </span>
+                      <br />
+                      <small class="text-muted">
+                        {{ appointment.admin_approval.assigned_staff.role|default:"Professional" }}
+                      </small>
+                    </div>
+
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div
+                    class="bg-transparent border border-success border-opacity-25 rounded-4 p-4 text-center h-100"
+                  >
+                    <div class="mb-3">
+                      <i class="fas fa-info-circle text-success fs-1"></i>
+                    </div>
+                    <h6 class="text-muted mb-2">Booking Information</h6>
+                    <div class="d-grid gap-2">
+                      <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted">Booked On:</small>
+                        <small class="fw-semibold"
+                          >{{ appointment.appointment_date|date:"M d, Y"|default:"Recently" }}
+                        </small>
+                      </div>
+
+                      <div class="d-flex justify-content-between mb-2">
+                        <small class="text-muted">Booking ID:</small>
+                        <small class="fw-semibold text-success"
+                          >#{{ appointment.id }}</small
+                        >
+                      </div>
+                      <div
+                        class="d-flex justify-content-center flex-wrap"
+                      ></div>
+                      {% if appointment.status != 'completed' and appointment.status != 'canceled' %}
+                      <button
+                        type="button"
+                        data-bs-toggle="modal"
+                        data-bs-target="#customerCancelAppointmentModal"
+                        data-service="{{ appointment.service.name }}"
+                        class="btn btn-danger btn-sm rounded px-3 cancel-btn"
+                        data-appointment-id="{{ appointment.id }}"
+                        data-url="{% url 'customer:appointment-cancel' appointment.id %}"
+                      >
+                        <i class="fas fa-times-circle me-1"></i> Cancel
+                      </button>
+                      {% endif %} {% if appointment.status == 'rejected' %}
+                      <a
+                        href="{% url 'customer:appointment-resubmit' appointment.id %}"
+                        class="btn btn-outline-primary btn-sm"
+                      >
+                        <i class="fas fa-redo-alt me-1"></i> Resubmit
+                      </a>
+                      {% endif %} {% if appointment.status == 'pending' %}
+                      <button
+                        class="btn btn-outline-secondary btn-sm rounded-pill px-3"
+                        disabled
+                      >
+                        <i class="fas fa-clock me-1"></i> Awaiting Approval
+                      </button>
+                      {% endif %} {% if appointment.status == 'approved' %}
+                      <button
+                        class="btn btn-outline-success btn-sm rounded-pill px-3"
+                        disabled
+                      >
+                        <i class="fas fa-check-circle me-1"></i> Confirmed
+                      </button>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+                {% if appointment.status == 'canceled' and appointment.admin_approval %}
+
+                <div class="col-12">
+                  <div
+                    class="bg-danger bg-opacity-10 rounded-4 p-3 border border-danger"
+                  >
+                    <div class="row g-3 text-center text-md-start">
+                      <!-- Cancelled By -->
+                      <div class="col-md-4 col-12">
+                        <i class="fas fa-ban text-danger me-1"></i>
+                        <span class="small fw-semibold">Cancelled By:</span
+                        ><br />
+
+                        {% if appointment.admin_approval.cancelled_by and appointment.admin_approval.cancelled_by.role == ADMIN %}
+                        <i class="fas fa-crown text-danger me-1"></i>
+                        Administrator {% else %}
+                        <i class="fas fa-user text-success me-1"></i>
+                        <span class="fw-semibold">You</span>
+                        {% endif %}
+                      </div>
+
+                      <!-- Reason -->
+                      <div class="col-md-4 col-12">
+                        <i class="fas fa-comment text-danger me-1"></i>
+                        <span class="small fw-semibold">Reason:</span><br />
+                        {{ appointment.admin_approval.get_cancellation_reason_display|default:"No reason provided" }}
+                      </div>
+
+                      <!-- Cancelled On -->
+                      <div class="col-md-4 col-12">
+                        <i class="fas fa-calendar text-danger me-1"></i>
+                        <span class="small fw-semibold">Cancelled On:</span
+                        ><br />
+                        {{ appointment.admin_approval.cancelled_at|date:"M d, Y" }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {% endif %}
+                <!-- Completed appointments Section review -->
+                {% if appointment.status == 'completed' and appointment.admin_approval %}
+                <div class="col-12">
+                  <div
+                    class="bg-success bg-opacity-10 rounded-4 p-3 border border-success text-center"
+                  >
+                    {% with review=appointment.service.reviews.last %} {% if review %}
+                    <div class="mb-2">
+                      {% for i in "12345"|make_list %} {% if forloop.counter <= review.rating %}
+                      <span class="text-warning">★</span>
+                      {% else %}
+                      <span class="text-dark">☆</span>
+                      {% endif %} {% endfor %}
+
+                      <p class="small text-muted mb-0">
+                        "{{ review.comment }}"
+                      </p>
+                    </div>
+                    {% else %}
+                    <span class="text-muted small">
+                      You haven't reviewed this service yet.
+                    </span>
+                    <a
+                      href="{% url 'feedback:service-reviews' appointment.service.id %}"
+                      class="btn btn-sm btn-outline-success rounded-pill"
+                    >
+                      Leave Feedback
+                    </a>
+                    {% endif %} {% endwith %}
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+      <div class="mt-4">{% include 'core/paginator.html' %}</div>
+      {% endif %} {% else %}
+      <div class="card border-0 shadow-lg rounded-4 text-center py-5">
+        <div class="card-body p-5">
+          <div
+            class="bg-success bg-opacity-10 d-inline-block p-4 rounded-circle mb-4"
+          >
+            <i class="fas fa-calendar-alt fa-3x text-success"></i>
+          </div>
+          <h3>No Appointments Yet</h3>
+          <a
+            href="{% url 'customer:booking' %}"
+            class="btn btn-success rounded-pill px-5"
+            >Book Now</a
+          >
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="customerCancelAppointmentModal"
+  tabindex="-1"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+      <div class="modal-header bg-danger text-white border-0 py-3">
+        <h5 class="modal-title">
+          <i class="fas fa-exclamation-triangle me-2"></i>Cancel Appointment
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="modal"
+        ></button>
+      </div>
+      <div class="modal-body text-center p-4">
+        <p>
+          Are you sure you want to cancel your <br /><strong
+            id="modal-service-name"
+            class="text-success"
+          ></strong>
+          appointment?
+        </p>
+        <form method="post" id="customerCancelAppointmentForm">
+          {% csrf_token %}
+          <div class="mb-3 text-start">
+            <label class="form-label small fw-bold"
+              >Reason for cancellation:</label
+            >
+            {{ form.cancellation_reason }}
+          </div>
+          <div class="d-flex gap-2 justify-content-center">
+            <button
+              type="button"
+              class="btn btn-outline-secondary px-4"
+              data-bs-dismiss="modal"
+            >
+              Go Back
+            </button>
+            <button type="submit" class="btn btn-danger px-4">
+              Confirm Cancellation
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

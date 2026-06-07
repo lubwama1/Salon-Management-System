@@ -1,0 +1,120 @@
+{% extends 'core/base.html' %} {% load static %}
+{% block title %}{{ staff.user.username|default:'Staff' }} profile | {% endblock title %}
+{% block content %}
+<div class="container py-5">
+  {% if messages %}
+  <div class="container">
+    {% for message in messages %}
+    <div
+      class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show"
+      role="alert"
+    >
+      {{ message }}
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="alert"
+        role="alert"
+        aria-label="Close"
+      ></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6 col-12">
+      <div class="card shadow border-0 rounded">
+        <div class="card-header bg-danger rounded-top-4 text-center text-white">
+          <h4 class="card-title fw-semibold">
+            Mr {{ staff.user.username|default:'N/A' }}!
+          </h4>
+          <small>Welcome to {{ staff.full_name }} profile.</small>
+        </div>
+        <div class="card-body p-4">
+          <div class="d-flex flex-column flex-md-row align-items-center">
+            <!-- Profile Image -->
+            <div class="me-md-4 mb-3 mb-md-5 text-center">
+              {% if staff.profile_image %}
+              <div
+                class="rounded-circle overflow-hidden shadow"
+                style="width: 150px; height: 150px"
+              >
+                <img
+                  src="{{ staff.profile_image.url }}"
+                  alt="{{ staff.username|default:'Profile Image' }}"
+                  class="w-100 h-100 profile-img"
+                  style="object-fit: cover"
+                />
+              </div>
+              {% else %}
+              <div
+                class="rounded-circle overflow-hidden"
+                style="width: 150px; height: 150px"
+              >
+                <img
+                  src="{% static 'images/default.jpg' %}"
+                  alt="{{ staff.username|default:'Profile Image' }}"
+                  class="w-100 h-100 profile-img"
+                  style="object-fit: cover"
+                />
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- User Info -->
+            <div class="text-center text-md-start">
+              <h4 class="fw-bold mb-2">{{ staff.full_name|default:'N/A' }}</h4>
+              <p class="text-muted mb-1">
+                <strong>Username:</strong> {{ staff.user.username|default:'N/A' }}
+              </p>
+              <p class="text-muted mb-1">
+                <strong>Email:</strong>
+                {% if staff.email %}
+                  {{ staff.email }}
+                {% else %}
+                  {{ staff.full_name }}@gmail.com
+                {% endif %}
+              </p>
+              <p class="text-muted mb-1">
+                <strong>Date Joined:</strong> {{ staff.date_joined }}
+              </p>
+              <p class="text-muted mb-1">
+                <strong>Role:</strong> {{ staff.role }}
+              </p>
+              {% if staff.employee_number %}
+              <p class="text-white mb-1 badge bg-danger">
+                <strong>EMP NO:</strong> {{ staff.employee_number }}
+              </p>
+              {% endif %}
+            </div>
+          </div>
+          <div class="mt-3 d-grid gap-2 d-none d-md-flex mt-3">
+            <a
+              href="{% url 'admin_manager:staff-list' %}"
+              class="btn btn-outline-secondary flex-fill"
+              ><i class="fas fa-arrow-left me-2"></i>Back</a
+            >
+            <a
+              href="{% url 'admin_manager:staff-edit' staff.slug %}"
+              class="btn btn-warning flex-fill"
+              ><i class="fas fa-user-edit me-2"></i>Edit Profile</a
+            >
+          </div>
+          <div class="mt-3 d-grid gap-2 d-md-none d-flex mt-3">
+            <a
+              href="{% url 'admin_manager:staff-list' %}"
+              class="btn btn-outline-secondary btn-sm flex-fill"
+              ><i class="fas fa-arrow-left me-2"></i>Back</a
+            >
+            <a
+              href="{% url 'admin_manager:staff-edit' staff.slug %}"
+              class="btn btn-warning btn-sm flex-fill"
+              ><i class="fas fa-user-edit me-2"></i>Edit Profile</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

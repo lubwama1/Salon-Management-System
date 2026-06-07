@@ -1,0 +1,135 @@
+{% extends 'core/base.html' %} {% load crispy_forms_tags %}
+{% block title %}Edit Profile | {% endblock title %}
+{% load static %} {% block content %}
+<div class="container py-5">
+  <!-- Messages -->
+  {% if messages %}
+  <div class="row justify-content-center mb-4">
+    <div class="col-md-8">
+      {% for message in messages %}
+      <div
+        class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm rounded-3"
+        role="alert"
+      >
+        <div class="d-flex align-items-center gap-2">
+          <i class="fas fa-bell me-2 text-primary"></i>
+          <span>{{ message }}</span>
+        </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <!-- Header - Primary Theme for Staff -->
+        <div
+          class="card-header bg-primary bg-gradient text-white text-center py-2 border-0"
+        >
+          <div class="mb-2">
+            <i class="fas fa-user-md fa-3x"></i>
+          </div>
+          <h4 class="fw-bold mb-1">Edit Staff Profile</h4>
+          <p class="small mb-0 opacity-75">
+            Update your professional information
+          </p>
+        </div>
+
+        <!-- Body -->
+        <div class="card-body p-4">
+          <form
+            action="{% url 'staff:profile-edit' %}"
+            method="post"
+            enctype="multipart/form-data"
+            id="staffEditForm"
+          >
+            {% csrf_token %}
+
+            <!-- Profile Image Preview Section -->
+            <div class="text-center mb-4">
+              <div
+                class="mx-auto rounded-circle overflow-hidden border border-3 border-primary shadow-sm mb-3"
+                style="width: 120px; height: 120px; background: #f8f9fa"
+              >
+                <img
+                  id="staffImagePreview"
+                  src="{% if form.instance.profile_image %}{{ form.instance.profile_image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
+                  class="w-100 h-100"
+                  style="object-fit: cover"
+                  alt="Staff Photo"
+                />
+              </div>
+              <div class="small text-muted">
+                <i class="fas fa-camera me-1 text-primary"></i>
+                Upload a professional photo
+              </div>
+            </div>
+
+            <!-- Form Fields -->
+            <div class="mb-4">{{ form|crispy }}</div>
+
+            <!-- Staff Info Card -->
+            <div
+              class="alert alert-primary bg-opacity-10 border-primary rounded-3 mb-4"
+            >
+              <div class="d-flex gap-3 align-items-center flex-wrap">
+                <i class="fas fa-id-badge text-primary fs-4"></i>
+                <div>
+                  <strong class="d-block small">Employee Number</strong>
+                  <small class="text-light">
+                    {{ form.instance.employee_number|default:"Will be auto-generated" }}
+                  </small
+                  >
+                </div>
+                <div class="ms-auto">
+                  <span
+                    class="badge bg-primary bg-opacity-25 text-primary rounded-pill"
+                    >Staff Access</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 mt-4">
+              <a
+                href="{% url 'staff:profile' %}"
+                class="btn btn-outline-secondary rounded-pill px-4 btn-sm flex-fill"
+              >
+                <i class="fas fa-arrow-left me-2"></i>Cancel
+              </a>
+              <button
+                type="submit"
+                class="btn btn-primary rounded-pill px-4 btn-sm flex-fill"
+              >
+                <i class="fas fa-save me-2"></i>Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Footer -->
+        <div
+          class="card-footer bg-primary bg-opacity-10 border-0 text-center py-3"
+        >
+          <small class="text-primary">
+            <i class="fas fa-clock me-1"></i>
+            Last updated: {{ form.instance.updated_at|date:"M d, Y"|default:"Never" }}
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock content %}

@@ -1,0 +1,129 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Admin Confirmation | {% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Messages Section -->
+  {% if messages %}
+    <div class="row justify-content-center mb-4">
+      <div class="col-md-8">
+        {% for message in messages %}
+          <div class="alert alert-{{ message.tags }} alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+            <div class="d-flex align-items-center gap-2">
+              {% if message.tags == 'success' %}
+                <i class="fas fa-check-circle fa-lg"></i>
+              {% elif message.tags == 'error' %}
+                <i class="fas fa-exclamation-circle fa-lg"></i>
+              {% elif message.tags == 'warning' %}
+                <i class="fas fa-exclamation-triangle fa-lg"></i>
+              {% else %}
+                <i class="fas fa-info-circle fa-lg"></i>
+              {% endif %}
+              <span>{{ message }}</span>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="row justify-content-center">
+    <div class="col-lg-5 col-md-7 col-11">
+      <!-- Main Card -->
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <!-- Card Header with Admin Badge -->
+        <div class="card-header bg-danger text-white text-center py-4 border-0">
+          <div class="mb-2">
+            <i class="fas fa-user-shield fa-3x"></i>
+          </div>
+          <h5 class="mb-0 fw-bold">Administrator Access</h5>
+          <p class="small mb-0 mt-1 opacity-75">Secure admin verification required</p>
+        </div>
+
+        <!-- Card Body -->
+        <div class="card-body p-4 p-lg-5">
+          <form action="{% url 'users:admin-confirmation' %}" method="post">
+            {% csrf_token %}
+
+            <!-- Admin Employee Number Field -->
+            <div class="mb-4">
+              <label for="emp-no" class="form-label fw-semibold">
+                <i class="fas fa-key text-danger me-1"></i> Admin Employee Number
+              </label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-end-0">
+                  <i class="fas fa-id-badge text-muted"></i>
+                </span>
+                <input
+                  type="text"
+                  class="form-control border-start-0 ps-0"
+                  id="emp-no"
+                  name="employee_number"
+                  placeholder="ELSA001"
+                  required
+                  autocomplete="off"
+                  autofocus
+                />
+              </div>
+              <div class="form-text mt-2">
+                <i class="fas fa-info-circle text-info me-1"></i>
+                Please enter your Admin Employee Number (Format: AEMP001, AEMP042)
+              </div>
+            </div>
+
+            <!-- Security Notice -->
+            <div class="alert alert-danger bg-opacity-10 border-danger rounded-3 mb-4 p-3">
+              <div class="d-flex gap-3 align-items-start">
+                <i class="fas fa-lock fs-4 text-danger"></i>
+                <div class="small">
+                  <strong class="d-block mb-1">Restricted Area</strong>
+                  <span class="text-muted">This portal is for authorized administrators only. Unauthorized access attempts are logged and monitored.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Access Info Card -->
+            <div class="alert alert-light border rounded-3 mb-4 p-3">
+              <div class="d-flex gap-3 align-items-start">
+                <i class="fas fa-shield-alt text-danger fs-4"></i>
+                <div class="small">
+                  <strong class="d-block mb-1">Admin Verification Required</strong>
+                  <span class="text-muted">Your Admin Employee Number grants access to the management dashboard, staff oversight, and appointment controls.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-danger btn-lg rounded-pill py-2 fw-semibold">
+                <i class="fas fa-sign-in-alt me-2"></i> Verify & Access
+              </button>
+              <a href="{% url 'users:login' %}" class="btn btn-outline-secondary rounded-pill py-2">
+                <i class="fas fa-arrow-left me-2"></i> Return to Login
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card-footer bg-white border-0 text-center pb-4">
+          <small class="text-muted">
+            <i class="fas fa-fingerprint me-1"></i> Secure authentication required
+          </small>
+        </div>
+      </div>
+
+      <!-- Help Section -->
+      <div class="text-center mt-4">
+        <small class="text-muted">
+          <i class="fas fa-question-circle me-1"></i>
+          Lost your admin credentials? Contact system administrator
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
