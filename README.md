@@ -14,7 +14,7 @@
 ## ✨ Overview
 
 A full-featured **salon management system** built with Django.
-It manages salon services, bookings, staff schedules, customer interactions, and real-time notifications in a modern web interface.
+It manages salon services, bookings, staff schedules, customer interactions, and full admin control tools.
 
 ---
 
