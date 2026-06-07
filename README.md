@@ -70,8 +70,8 @@ It manages salon services, bookings, staff schedules, customer interactions, and
 ### 🔔 Notifications System
 - [x] Booking alerts & status updates
 
-- [] Real-time notifications (Django Channels)
-- [] AJAX updates (no page reload)
+- [ ] Real-time notifications (Django Channels)
+- [ ] AJAX updates (no page reload)
 
 ---
 
