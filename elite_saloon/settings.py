@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'notifications',
     'feedback.apps.FeedbackConfig',
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
