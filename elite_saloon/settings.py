@@ -217,13 +217,13 @@ SOCIALACCOUNT_PROVIDERS = {
         },
         'SCOPE': ['user:email'],
     },
-    'facebook': {
-        'APP': {
-            'client_id': os.getenv('SOCIAL_AUTH_FACEBOOK_KEY'),
-            'secret': os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET'),
-        },
-        'SCOPE': ['email', 'public_profile'],
-    }
+    # 'facebook': {
+    #     'APP': {
+    #         'client_id': os.getenv('SOCIAL_AUTH_FACEBOOK_KEY'),
+    #         'secret': os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET'),
+    #     },
+    #     'SCOPE': ['email', 'public_profile'],
+    # }
 
 }
 
