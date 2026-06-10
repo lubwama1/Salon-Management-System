@@ -33,46 +33,50 @@
               OR
             </div>
           </div>
-          <div class="btn-group d-none d-md-flex" role="group">
+         <!-- Social Login -->
+          <div class="d-flex justify-content-center gap-3 mb-4 d-md-none">
             <a
               href="{% provider_login_url 'google' %}"
-              class="btn btn-outline-danger social-btn d-flex justify-content-center align-items-center"
+              class="btn btn-outline-danger rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-google fs-5"></i>
+            </a>
+            <a
+              href="{% provider_login_url 'github' %}"
+              class="btn btn-outline-dark rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-github fs-5"></i>
+            </a>
+            <a
+              href="#"
+              class="btn btn-outline-primary rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-facebook fs-5"></i>
+            </a>
+          </div>
+
+          <!-- Large Screens -->
+          <div class="d-none d-md-flex flex-column flex-md-row gap-2 mb-4">
+            <a
+              href="{% provider_login_url 'google' %}"
+              class="btn btn-outline-danger flex-fill rounded-3 py-2"
             >
               <i class="fab fa-google me-2"></i>Google
             </a>
             <a
               href="{% provider_login_url 'github' %}"
-              class="btn btn-outline-light social-btn d-flex justify-content-center align-items-center"
+              class="btn btn-outline-dark flex-fill rounded-3 py-2"
             >
-              <i class="fab fa-github me-2"></i>Github
+              <i class="fab fa-github me-2"></i>GitHub
             </a>
             <a
-              href="{% provider_login_url 'yahoo' %}"
-              class="btn btn-outline-info social-btn d-flex justify-content-center align-items-center"
+              href="#"
+              class="btn btn-outline-primary flex-fill rounded-3 py-2"
             >
-              <i class="fab fa-yahoo text-info"></i>Yahoo
-            </a>
-          </div>
-
-          <!-- Small screens: circular buttons -->
-          <div class="d-flex justify-content-center d-md-none gap-2">
-            <a
-              href="{% provider_login_url 'google' %}"
-              class="btn btn-outline-danger social-btn-sm d-flex justify-content-center align-items-center"
-            >
-              <i class="fab fa-google"></i>
-            </a>
-            <a
-              href="{% provider_login_url 'github' %}"
-              class="btn btn-outline-light social-btn-sm d-flex justify-content-center align-items-center"
-            >
-              <i class="fab fa-github"></i>
-            </a>
-            <a
-              href="{% provider_login_url 'yahoo' %}"
-              class="btn btn-outline-info social-btn-sm d-flex justify-content-center align-items-center"
-            >
-              <i class="fab fa-yahoo text-info"></i>
+              <i class="fab fa-facebook me-2"></i>Facebook
             </a>
           </div>
           <div class="text-center">
