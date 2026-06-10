@@ -198,33 +198,44 @@ SILENCED_SYSTEM_CHECKS = ['models.W036']
 MESSAGE_STORAGE = "django.contrib.messages.storage.cookie.CookieStorage"
 
 # Django Allauth Settings
+# SOCIALACCOUNT_PROVIDERS = {
+#     'google': {
+#         'APP': {
+#             'client_id': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
+#             'secret': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
+#             'key': ''
+#         },
+#         'SCOPE': ['profile', 'email'],
+#         'AUTH_PARAMS': {'access_type': 'online'},
+#         'OAUTH_PKCE_ENABLED': True,
+#     },
+#     'github': {
+#         'APP': {
+#             'client_id': os.getenv('SOCIAL_AUTH_GITHUB_KEY'),
+#             'secret': os.getenv('SOCIAL_AUTH_GITHUB_SECRET'),
+#             'key': ''
+#         },
+#         'SCOPE': ['user:email'],
+#     },
+#     # 'facebook': {
+#     #     'APP': {
+#     #         'client_id': os.getenv('SOCIAL_AUTH_FACEBOOK_KEY'),
+#     #         'secret': os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET'),
+#     #     },
+#     #     'SCOPE': ['email', 'public_profile'],
+#     # }
+
+# }
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        'APP': {
-            'client_id': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY'),
-            'secret': os.getenv('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET'),
-            'key': ''
-        },
         'SCOPE': ['profile', 'email'],
         'AUTH_PARAMS': {'access_type': 'online'},
         'OAUTH_PKCE_ENABLED': True,
     },
     'github': {
-        'APP': {
-            'client_id': os.getenv('SOCIAL_AUTH_GITHUB_KEY'),
-            'secret': os.getenv('SOCIAL_AUTH_GITHUB_SECRET'),
-            'key': ''
-        },
         'SCOPE': ['user:email'],
     },
-    # 'facebook': {
-    #     'APP': {
-    #         'client_id': os.getenv('SOCIAL_AUTH_FACEBOOK_KEY'),
-    #         'secret': os.getenv('SOCIAL_AUTH_FACEBOOK_SECRET'),
-    #     },
-    #     'SCOPE': ['email', 'public_profile'],
-    # }
-
 }
 
 SITE_ID = 1
