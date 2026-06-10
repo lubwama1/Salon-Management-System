@@ -1,4 +1,7 @@
+import logging
+
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect, render
 from .forms import UserRegistrationForm
@@ -54,9 +57,13 @@ def user_login(request):
 
 
 def user_logout(request):
-    logout(request)
-    messages.success(request, 'You have been logged out.')
-    return redirect('account_login')
+    try:
+        logout(request)
+        return redirect('account_login')
+
+    except Exception as e:
+        logging.error(f"Error during logout: {str(e)}")
+        return HttpResponseServerError(f"Internal Server Error, Details: {str(e)}")
 
 
 @login_required(login_url='account_login')
