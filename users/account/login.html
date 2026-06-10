@@ -1,0 +1,171 @@
+{% extends 'core/base.html' %} {% load socialaccount %}
+{% block title %}Login | {% endblock title %} {% block content %}
+<div class="container py-5 my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="bg-primary bg-gradient text-white text-center py-4">
+          <div class="mb-3">
+            <i class="fas fa-lock fs-1"></i>
+          </div>
+          <h3 class="fw-bold mb-0">Welcome Back!</h3>
+          <p class="text-white-50 mb-0 small">
+            Sign in to continue to your account
+          </p>
+        </div>
+
+        <!-- Messages -->
+        {% if messages %}
+        <div class="px-4 pt-4">
+          {% for message in messages %}
+          <div
+            class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show mb-0 shadow-sm"
+            role="alert"
+          >
+            <i
+              class="fas fa-{% if message.tags == 'error' %}exclamation-circle{% else %}info-circle{% endif %} me-2"
+            ></i>
+            {{ message }}
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
+          </div>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="card-body p-4 p-lg-5">
+          <form action="{% url 'account_login' %}" method="post">
+            {% csrf_token %}
+
+            <!-- Email Field -->
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold mb-2">
+                <i class="fas fa-envelope me-2 text-primary"></i>Email Address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                class="form-control form-control-lg rounded-3 border-2"
+                placeholder="name@example.com"
+                required
+              />
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-2">
+              <label for="password" class="form-label fw-semibold mb-2">
+                <i class="fas fa-lock me-2 text-primary"></i>Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                id="password"
+                class="form-control form-control-lg rounded-3 border-2"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <!-- Forgot Password Link -->
+            <div class="text-end mb-4">
+              <a
+                href="#"
+                class="small text-decoration-none text-primary fw-semibold"
+              >
+                Forgot password?
+                <i class="fas fa-arrow-right ms-1 small"></i>
+              </a>
+            </div>
+
+            <!-- Login Button -->
+            <div class="d-grid mb-4">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg rounded-3 fw-semibold shadow-sm py-2"
+              >
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+              </button>
+            </div>
+          </form>
+
+          <!-- Divider -->
+          <div class="position-relative my-4">
+            <hr class="border-2 opacity-25" />
+            <div
+              class="position-absolute top-50 start-50 translate-middle bg-white px-3 text-secondary fw-semibold small"
+            >
+              OR
+            </div>
+          </div>
+
+          <!-- Social Login -->
+          <div class="d-flex justify-content-center gap-3 mb-4 d-md-none">
+            <a
+              href="#"
+              class="btn btn-outline-danger rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-google fs-5"></i>
+            </a>
+            <a
+              href="#"
+              class="btn btn-outline-dark rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-github fs-5"></i>
+            </a>
+            <a
+              href="#"
+              class="btn btn-outline-primary rounded-circle p-3"
+              style="width: 52px; height: 52px"
+            >
+              <i class="fab fa-facebook fs-5"></i>
+            </a>
+          </div>
+
+          <!-- Large Screens -->
+          <div class="d-none d-md-flex flex-column flex-md-row gap-2 mb-4">
+            <a
+              href="{% provider_login_url 'google' %}"
+              class="btn btn-outline-danger flex-fill rounded-3 py-2"
+            >
+              <i class="fab fa-google me-2"></i>Google
+            </a>
+            <a
+              href="{% provider_login_url 'github' %}"
+              class="btn btn-outline-dark flex-fill rounded-3 py-2"
+            >
+              <i class="fab fa-github me-2"></i>GitHub
+            </a>
+            <a
+              href="{% provider_login_url 'facebook' %}"
+              class="btn btn-outline-primary flex-fill rounded-3 py-2"
+            >
+              <i class="fab fa-facebook me-2"></i>Facebook
+            </a>
+          </div>
+
+          <!-- Register Link -->
+          <div class="text-center pt-2">
+            <p class="mb-0 text-secondary">
+              New to our platform?
+              <a
+                href="{% url 'account_signup' %}"
+                class="text-decoration-none fw-bold text-primary ms-1"
+              >
+                Create account
+                <i class="fas fa-user-plus ms-1"></i>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

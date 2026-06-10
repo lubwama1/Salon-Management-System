@@ -69,7 +69,7 @@
         <li class="nav-item d-md-none">
           <a
             class="nav-link fw-semibold text-danger"
-            href="{% url 'users:logout' %}"
+            href="{% url 'account_logout' %}"
           >
             <i class="fas fa-sign-out-alt me-1"></i>Logout
           </a>
@@ -123,7 +123,7 @@
             <li>
               <a
                 class="dropdown-item text-danger py-2"
-                href="{% url 'users:logout' %}"
+                href="{% url 'account_logout' %}"
               >
                 <i class="fas fa-sign-out-alt me-2"></i>Logout
               </a>
@@ -134,7 +134,7 @@
         <li class="nav-item">
           <a
             class="btn btn-outline-light btn-sm px-3"
-            href="{% url 'users:login' %}"
+            href="{% url 'account_login' %}"
           >
             Login
           </a>
@@ -142,7 +142,7 @@
         <li class="nav-item">
           <a
             class="btn btn-light btn-sm px-3"
-            href="{% url 'users:register' %}"
+            href="{% url 'account_signup' %}"
           >
             Register
           </a>

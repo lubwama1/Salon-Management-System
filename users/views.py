@@ -17,7 +17,7 @@ def register(request):
             form.save()
             messages.success(
                 request, 'Your account has been created successfully. You can now log in.')
-            return redirect('users:login')
+            return redirect('account_login')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -25,7 +25,7 @@ def register(request):
     context = {
         'form': form
     }
-    return render(request, 'users/register.html', context)
+    return render(request, 'account/signup.html', context)
 
 def user_login(request):
     if request.method == 'POST':
@@ -50,16 +50,16 @@ def user_login(request):
 
         messages.error(request, "Invalid credentials")
 
-    return render(request, 'users/login.html')
+    return render(request, 'account/login.html')
 
 
 def user_logout(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
-    return redirect('users:login')
+    return redirect('account_login')
 
 
-@login_required(login_url='users:login')
+@login_required(login_url='account_login')
 def staff_register_confirmation(request):
     user = request.user
     STAFF_ROLE = CustomUser.UserRoleChoices.STAFF

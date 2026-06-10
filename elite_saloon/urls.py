@@ -19,8 +19,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-
- # SItemaps
+# SItemaps
 from django.contrib.sitemaps.views import sitemap
 from core.sitemaps import StaticViewSitemap, ServiceViewSitemap, CategoryViewSitemap
 from django.views.generic import TemplateView
@@ -31,8 +30,10 @@ sitemaps = {
 }
 
 urlpatterns = [
-    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt', TemplateView.as_view(template_name='core/robots.txt', content_type='text/plain')),
+    path('sitemap.xml/', sitemap, {'sitemaps': sitemaps},
+         name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(
+        template_name='core/robots.txt', content_type='text/plain')),
     path('admin/', admin.site.urls),
     path('', include('core.urls')),
     path('admin_manager/', include('admin_manager.urls')),
@@ -43,6 +44,7 @@ urlpatterns = [
     path('notifications/', include('notifications.urls')),
     path('settings/', include('site_settings.urls')),
     path('feedback/', include('feedback.urls')),
+    path('accounts/', include('allauth.urls')),
 
 ]
 

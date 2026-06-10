@@ -651,7 +651,7 @@ class AppointmentNotificationView(LoginRequiredMixin, AdminRequiredMixin, ListVi
 
 def admin_cancel_appointment(request, appointment_id):
     if not request.user.is_authenticated:
-        return redirect('users:login')
+        return redirect('account_login')
 
     if request.user.role != CustomUser.UserRoleChoices.ADMIN:
         messages.error(request, "Sorry you're not allowed here.")
@@ -942,11 +942,14 @@ class AddTeamMemberView(LoginRequiredMixin, AdminRequiredMixin, CreateView):
 
     def form_valid(self, form):
         member = form.save(commit=False)
-        messages.success(self.request, f'Team Member {(member.name)} added successfully.')
+        messages.success(
+            self.request, f'Team Member {(member.name)} added successfully.')
         return super().form_valid(form)
+
     def form_invalid(self, form):
         messages.error(self.request, 'An error occured added team member.')
         return super().form_invalid(form)
+
 
 class TeamMemberView(LoginRequiredMixin, AdminRequiredMixin, ListView):
     model = TeamMember
@@ -964,6 +967,7 @@ class TeamMemberEditView(LoginRequiredMixin, AdminRequiredMixin, UpdateView):
     pk_url_kwarg = 'member_id'
     context_object_name = 'member'
     success_url = reverse_lazy('admin_manager:team-list')
+
     def form_valid(self, form):
         member = form.save(commit=False)
         messages.success(
