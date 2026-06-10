@@ -14,21 +14,25 @@ from django.contrib.auth.decorators import login_required
 
 
 def register(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(
-                request, 'Your account has been created successfully. You can now log in.')
-            return redirect('account_login')
+    try:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST, request.FILES)
+            if form.is_valid():
+                form.save()
+                messages.success(
+                    request, 'Your account has been created successfully. You can now log in.')
+                return redirect('account_login')
+            else:
+                messages.error(request, 'Please correct the errors below.')
         else:
-            messages.error(request, 'Please correct the errors below.')
-    else:
-        form = UserRegistrationForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'account/signup.html', context)
+            form = UserRegistrationForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'account/signup.html', context)
+    except Exception as e:
+        logging.error(f"Error during registration: {str(e)}")
+        return HttpResponseServerError(f"Internal Server Error, Details: {str(e)}")
 
 def user_login(request):
     if request.method == 'POST':

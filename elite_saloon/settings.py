@@ -35,12 +35,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.facebook',
     'admin_manager.apps.AdminManagerConfig',
     'customer.apps.CustomerConfig',
     'services.apps.ServicesConfig',
@@ -52,6 +46,12 @@ INSTALLED_APPS = [
     'feedback.apps.FeedbackConfig',
     'crispy_forms',
     'crispy_bootstrap4'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.facebook',
 
 ]
 
