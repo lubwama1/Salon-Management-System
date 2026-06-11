@@ -36,12 +36,12 @@ def register(request):
 
 def user_login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        username = request.POST.get('username')
         password = request.POST.get('password')
         CUSTOMER_ROLE = CustomUser.UserRoleChoices.CUSTOMER
         ADMIN_ROLE = CustomUser.UserRoleChoices.ADMIN
         STAFF_ROLE = CustomUser.UserRoleChoices.STAFF
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
