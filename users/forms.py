@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import CustomUser
 
 class UserRegistrationForm(UserCreationForm):
@@ -41,3 +41,18 @@ class UserRegistrationForm(UserCreationForm):
         print(self.fields.keys())
 
 
+class UserLoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        placeholders = {
+            'username': 'username',
+            'password': 'password'
+        }
+        for field_name, field in self.fields.items():
+            field.widget.attrs.update(
+                {
+                    'placeholder': placeholders.get(
+                        field_name, ''
+                    )
+                }
+            )

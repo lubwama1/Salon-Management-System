@@ -4,14 +4,15 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseServerError
 from django.shortcuts import render, redirect
 from django.shortcuts import redirect, render
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserLoginForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from .models import CustomUser
 from staff.models import StaffProfile
 from admin_manager.models import AdminProfile
 from django.contrib.auth.decorators import login_required
-
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 def register(request):
     try:
@@ -38,6 +39,7 @@ def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+
         CUSTOMER_ROLE = CustomUser.UserRoleChoices.CUSTOMER
         ADMIN_ROLE = CustomUser.UserRoleChoices.ADMIN
         STAFF_ROLE = CustomUser.UserRoleChoices.STAFF
@@ -59,6 +61,37 @@ def user_login(request):
 
     return render(request, 'account/login.html')
 
+class UserLoginView(LoginView):
+    template_name = 'account/login.html'
+    form_class = UserLoginForm
+    redirect_authenticated_user = True
+
+    def get_success_url(self):
+        """Return the URL to redirect to after successful login."""
+        user = self.request.user
+
+        # Check user role and redirect accordingly
+        if user.role == CustomUser.UserRoleChoices.CUSTOMER:
+            return reverse_lazy('core:home')
+        elif user.role == CustomUser.UserRoleChoices.ADMIN:
+            return reverse_lazy('users:admin-confirmation')
+        elif user.role == CustomUser.UserRoleChoices.STAFF:
+            return reverse_lazy('users:staff-confirmation')
+        else:
+            # Default fallback
+            return reverse_lazy('core:home')
+
+    def form_invalid(self, form):
+        """Handle invalid login form."""
+        messages.error(self.request, "Invalid credentials")
+        return super().form_invalid(form)
+
+    def dispatch(self, request, *args, **kwargs):
+        """Override dispatch to handle already authenticated users."""
+        if request.user.is_authenticated:
+            # User is already logged in, redirect based on role
+            return redirect(self.get_success_url())
+        return super().dispatch(request, *args, **kwargs)
 
 def user_logout(request):
     try:
