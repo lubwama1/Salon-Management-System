@@ -16,7 +16,7 @@ body {
 :root {
   --staff-bg: #0d3b66;
   --customer-bg: #111;
-  --guest-bg: linear-gradient(90deg, #0dcaf0, #0315de);
+  --guest-bg: linear-gradient(90deg, #29692e, #2a3181);
   --admin-bg: #fffbfb;
 
   --primary: #0dcaf0;
