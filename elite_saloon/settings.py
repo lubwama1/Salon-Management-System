@@ -176,7 +176,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Authentication URLs
-LOGIN_URL = 'users:logiaccount_login'
+LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'account_login'
 SIGNUP_REDIRECT_URL = 'account_login'
@@ -249,8 +249,8 @@ SITE_ID = 1
 
 
 # Django Allauth Account Settings
-# ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_LOGIN_METHODS = {'username'}
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_LOGIN_METHODS = ['username']
 
 # ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SIGNUP_FIELDS = ['email', 'username*', 'password1*', 'password2*']
