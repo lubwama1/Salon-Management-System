@@ -12,8 +12,22 @@ from staff.models import StaffProfile
 from admin_manager.models import AdminProfile
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from allauth.account.views import SignupView # type: ignore
+from allauth.account.models import EmailAddress # type: ignore
 from django.urls import reverse_lazy
 
+
+class UserRegistrationView(SignupView):
+    template_name = 'account/signup.html'
+    form_class = UserRegistrationForm
+    def get_success_url(self):
+        messages.success(self.request, 'Your account has been created successfully. You can now log in.')
+        return reverse_lazy('account_login')
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{field}: {error}")
+        return super().form_invalid(form)
 def register(request):
     try:
         if request.method == 'POST':
@@ -34,6 +48,7 @@ def register(request):
     except Exception as e:
         logging.error(f"Error during registration: {str(e)}")
         return HttpResponseServerError(f"Internal Server Error, Details: {str(e)}")
+
 
 def user_login(request):
     if request.method == 'POST':
