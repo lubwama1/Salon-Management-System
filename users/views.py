@@ -20,13 +20,16 @@ from django.urls import reverse_lazy
 class UserRegistrationView(SignupView):
     template_name = 'account/signup.html'
     form_class = UserRegistrationForm
+
     def get_success_url(self):
-        messages.success(self.request, 'Your account has been created successfully. You can now log in.')
+        messages.success(
+            self.request,
+            "Account created successfully. You can now log in."
+        )
         return reverse_lazy('account_login')
+
     def form_invalid(self, form):
-        for field, errors in form.errors.items():
-            for error in errors:
-                messages.error(self.request, f"{field}: {error}")
+        messages.error(self.request, "Please fix the errors below.")
         return super().form_invalid(form)
 def register(request):
     try:
