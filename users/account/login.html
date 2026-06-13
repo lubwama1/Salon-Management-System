@@ -36,7 +36,13 @@
           {% endfor %}
         </div>
         {% endif %}
-
+        {% for field in form %}
+          {% for error in field.errors %}
+              <div class="alert alert-danger">
+                  {{ field.name }}: {{ error }}
+              </div>
+          {% endfor %}
+      {% endfor %}
         <div class="card-body p-4 p-lg-5">
           <form action="{% url 'account_login' %}" method="post">
             {% csrf_token %}
@@ -48,8 +54,8 @@
               </label>
               <input
                 type="text"
-                name="username"
-                id="username"
+                name="login"
+                id="login"
                 class="form-control form-control-lg rounded-3 border-2"
                 placeholder="JonDoe"
                 required
